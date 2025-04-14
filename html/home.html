@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Danh sách khóa học | E-Learning</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+      .sidebar {
+        min-height: 100vh;
+        border-right: 1px solid #dee2e6;
+      }
+
+      .card-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+
+      .card-subtitle {
+        font-size: 0.95rem;
+        color: #6c757d;
+      }
+
+      .card-date {
+        font-size: 0.9rem;
+        color: #888;
+      }
+
+      .footer-link:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">E-Learning</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="login.html">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main container -->
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 bg-light sidebar">
+          <div class="position-sticky">
+            <h4 class="p-3">Khóa học của tôi</h4>
+            <ul class="nav flex-column" id="course-list">
+              <!-- Sidebar course list will be injected here -->
+            </ul>
+          </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <h2 class="mt-4">Danh sách khóa học</h2>
+          <div id="course-cards" class="row">
+            <!-- Course cards will be injected here -->
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-light bg-dark py-3 mt-4">
+      <div class="container text-center">
+        <p><a href="#" class="text-light footer-link">✉ Contact site support</a></p>
+        <p>
+          Bạn đang đăng nhập với tên
+          <a href="login.html" class="text-light" id="username-display">Đang tải...</a>
+        </p>
+        <p><a href="#" class="text-light footer-link">Trang chủ</a></p>
+      </div>
+    </footer>
+
+    <!-- Script -->
+    <script>
+      // Display logged-in user
+      document.addEventListener("DOMContentLoaded", function () {
+        const fullname = localStorage.getItem("fullname");
+        const displayElement = document.getElementById("username-display");
+        displayElement.textContent = fullname ? `${fullname} (Thoát)` : "Khách (Thoát)";
+      });
+
+      // Format ISO date to dd/mm/yyyy hh:mm
+      function formatDate(isoDate) {
+        const date = new Date(isoDate);
+        const options = {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        };
+        return date.toLocaleString("vi-VN", options);
+      }
+
+      // Load sidebar course list
+      async function loadCourses() {
+        const token = localStorage.getItem("token");
+        const courseList = document.getElementById("course-list");
+
+        try {
+          const response = await fetch("http://localhost:8080/elearning/courses", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          const data = await response.json();
+
+          if (data.code === 200 && Array.isArray(data.result)) {
+            courseList.innerHTML = "";
+            data.result.forEach((course) => {
+              const li = document.createElement("li");
+              li.className = "nav-item";
+
+              const a = document.createElement("a");
+              a.className = "nav-link";
+              a.href = `course-detail.html?id=${course.id}`;
+              a.textContent = course.courseName;
+
+              li.appendChild(a);
+              courseList.appendChild(li);
+            });
+          } else {
+            courseList.innerHTML = "<li class='nav-item text-danger p-2'>Không có khóa học nào.</li>";
+          }
+        } catch (error) {
+          console.error("Lỗi khi tải khóa học:", error);
+          courseList.innerHTML =
+            "<li class='nav-item text-danger p-2'>Không thể tải danh sách khóa học.</li>";
+        }
+      }
+
+      // Load course cards in main content
+      async function loadCourseCards() {
+        const token = localStorage.getItem("token");
+        const courseCardsContainer = document.getElementById("course-cards");
+
+        try {
+          const response = await fetch("http://localhost:8080/elearning/courses", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          const data = await response.json();
+
+          if (data.code === 200 && Array.isArray(data.result)) {
+            courseCardsContainer.innerHTML = "";
+
+            data.result.forEach((course) => {
+              const col = document.createElement("div");
+              col.className = "col-md-6 col-lg-4 mb-4";
+
+              const card = document.createElement("div");
+              card.className = "card h-100 shadow-sm";
+
+              const cardBody = document.createElement("div");
+              cardBody.className = "card-body";
+
+              const title = document.createElement("h5");
+              title.className = "card-title";
+              title.textContent = course.courseName;
+
+              const teacher = document.createElement("p");
+              teacher.className = "card-subtitle mb-2";
+              teacher.textContent = `GV: ${course.teacher?.fullName ?? "Không rõ"}`;
+
+              const createdAt = document.createElement("p");
+              createdAt.className = "card-date";
+              createdAt.textContent = `Tạo ngày: ${formatDate(course.createdAt)}`;
+
+              const btn = document.createElement("a");
+              btn.href = `course-detail.html?id=${course.id}`;
+              btn.className = "btn btn-primary mt-3";
+              btn.textContent = "Xem chi tiết";
+
+              cardBody.appendChild(title);
+              cardBody.appendChild(teacher);
+              cardBody.appendChild(createdAt);
+              cardBody.appendChild(btn);
+
+              card.appendChild(cardBody);
+              col.appendChild(card);
+              courseCardsContainer.appendChild(col);
+            });
+          } else {
+            courseCardsContainer.innerHTML = "<p class='text-danger'>Không có khóa học nào.</p>";
+          }
+        } catch (error) {
+          console.error("Lỗi khi tải danh sách khóa học:", error);
+          courseCardsContainer.innerHTML = "<p class='text-danger'>Không thể tải khóa học.</p>";
+        }
+      }
+
+      // On load
+      document.addEventListener("DOMContentLoaded", () => {
+        loadCourses();
+        loadCourseCards();
+      });
+    </script>
+  </body>
+</html>
