@@ -95,7 +95,7 @@
             <table class="table table-bordered">
               <tr>
                 <th>Trạng thái bài nộp</th>
-                <td id="submission-status">Đang kiểm tra...</td>
+                <td id="submission-status">Chưa nộp bài</td>
               </tr>
               <tr>
                 <th>Thời gian còn lại</th>
@@ -103,7 +103,7 @@
               </tr>
               <tr>
                 <th>Chỉnh sửa lần cuối</th>
-                <td>-</td>
+                <td id="submission-last-edit">-</td>
               </tr>
               <tr>
                 <th>Đăng tải các bình luận</th>
@@ -125,7 +125,7 @@
             >Khách (Thoát)</a
           >
         </p>
-        <p><a href="#" class="text-light">Trang chủ</a></p>
+        <p><a href="home.html" class="text-light">Trang chủ</a></p>
       </div>
     </footer>
 
@@ -226,10 +226,10 @@
             const uploadBtn = document.getElementById("upload-btn");
             const submissionStatus =
               document.getElementById("submission-status");
-            console.log("Chuẩn  bị lấy danh sách bài nộp");
             if (data.code === 200 && data.result.submissionUrl.length > 0) {
+              document.getElementById("submission-last-edit").innerHTML =
+                data.result.submittedAt;
               const submissionUrls = data.result.submissionUrl;
-
               // Xóa các option cũ nếu có
               submissionDropdown.innerHTML = "";
 
@@ -249,7 +249,7 @@
                   window.open(selectedUrl, "_blank"); // Mở link trong tab mới
                 }
               });
-              uploadBtn.textContent = "Chỉnh sửa bài nộp";
+              uploadBtn.textContent = "Gỡ bài nộp";
               submissionStatus.textContent = "Đã nộp bài";
               console.log("Đã lấy danh sách bài nộp");
             } else {
@@ -257,11 +257,12 @@
               submissionDropdown.innerHTML =
                 "<option>Không có bài nộp</option>";
               uploadBtn.textContent = "Thêm bài nộp";
-              submissionStatus.textContent = "Chưa có bài nộp";
+              submissionStatus.textContent = "Chưa nộp bài";
             }
           })
           .catch((err) => {
             console.error("Lỗi khi tải bài đã nộp:", err);
+            submissionStatus.textContent = "Chưa nộp bài";
           });
 
         // Tải danh sách khóa học
@@ -301,7 +302,39 @@
         let filesToUpload = [];
 
         uploadBtn.addEventListener("click", () => {
-          dropZone.classList.toggle("d-none");
+          if (uploadBtn.textContent === "Gỡ bài nộp") {
+            const confirmDelete = confirm(
+              "Bạn có chắc chắn muốn gỡ bài đã nộp?"
+            );
+            if (!confirmDelete) return;
+
+            fetch(
+              `http://localhost:8080/elearning/submissions/${assignmentId}/${userId}`,
+              {
+                method: "DELETE",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            )
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.code === 200) {
+                  alert("Đã gỡ bài nộp thành công.");
+                  location.reload();
+                } else {
+                  alert("Không thể gỡ bài nộp: " + data.message);
+                }
+              })
+              .catch((err) => {
+                location.reload();
+                console.error("Lỗi khi gỡ bài nộp:", err);
+                alert("Đã gỡ bài nộp thành công.");
+              });
+          } else {
+            // Hiện vùng kéo thả để thêm bài
+            dropZone.classList.toggle("d-none");
+          }
         });
 
         dropZone.addEventListener("dragover", (e) => {

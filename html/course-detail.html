@@ -73,20 +73,12 @@
               >
             </div>
 
-            <h4>Bài học</h4>
-            <div class="list-group mb-4">
-              <a href="#" class="list-group-item list-group-item-action"
-                >Tài liệu lý thuyết</a
-              >
-              <a href="#" class="list-group-item list-group-item-action"
-                >Ôn thi cuối kỳ</a
-              >
-              <a href="#" class="list-group-item list-group-item-action"
-                >Bài tập lý thuyết</a
-              >
+            <h4 class="mt-4">Danh sách bài giảng</h4>
+            <div id="lessonList" class="list-group">
+              <div class="text-muted">Đang tải bài giảng...</div>
             </div>
 
-            <h2 class="mt-4">Bài tập</h2>
+            <h4 class="mt-4">Bài tập</h4>
             <div id="assignmentList" class="list-group">
               <!-- Bài tập sẽ được load ở đây bằng JavaScript -->
               <div class="text-muted">Đang tải bài tập...</div>
@@ -105,7 +97,7 @@
             >Đang tải...</a
           >
         </p>
-        <p><a href="index.html" class="text-light">Trang chủ</a></p>
+        <p><a href="home.html" class="text-light">Trang chủ</a></p>
       </div>
     </footer>
 
@@ -183,7 +175,51 @@
                 "<li class='nav-item text-danger p-2'>Không có khóa học.</li>";
             }
           });
+// Danh sách bài giảng
+fetch(`http://localhost:8080/elearning/lessons/all/${courseId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            const lessonList = document.getElementById("lessonList");
+            lessonList.innerHTML = "";
 
+            if (data.result && data.result.length > 0) {
+              data.result.forEach((lesson) => {
+                const item = document.createElement("a");
+                item.href = `lesson-detail.html?id=${lesson.id}`;
+                item.className = "list-group-item list-group-item-action";
+
+                const title = document.createElement("h5");
+                title.className = "mb-1";
+                title.textContent = lesson.title;
+
+                const videoLink = document.createElement("a");
+                videoLink.href = lesson.videoUrl;
+                videoLink.textContent = "Xem video";
+                videoLink.target = "_blank";
+                videoLink.className = "text-primary small";
+
+                item.appendChild(title);
+                if (lesson.videoUrl) {
+                  item.appendChild(videoLink);
+                }
+
+                lessonList.appendChild(item);
+              });
+            } else {
+              lessonList.innerHTML =
+                '<div class="text-muted">Chưa có bài giảng nào.</div>';
+            }
+          })
+          .catch(() => {
+            const lessonList = document.getElementById("lessonList");
+            lessonList.innerHTML =
+              '<div class="text-danger">Không thể tải danh sách bài giảng.</div>';
+          });
            //Lấy danh sấch bài tập
         const apiUrl = `http://localhost:8080/elearning/assignments/by-course/${courseId}`;
         const assignmentList = document.getElementById("assignmentList");

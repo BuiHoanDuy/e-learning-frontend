@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chỉnh sửa thông tin cá nhân</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Để footer luôn sát đáy */
+      html, body {
+        height: 100%;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+      main {
+        flex: 1;
+      }
+      footer {
+        margin-top: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav id="header" class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" id="logo-link" href="#">E-Learning</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" id="home-link" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="login.html">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 bg-light sidebar">
+          <div class="position-sticky">
+            <h4 class="p-3">Khóa học của tôi</h4>
+            <ul class="nav flex-column" id="course-list">
+              <!-- Sidebar course list will be injected here -->
+            </ul>
+          </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <div class="container mt-5">
+            <h2 class="mb-4">Chỉnh sửa thông tin cá nhân</h2>
+
+            <form id="editProfileForm">
+              <div class="mb-3">
+                <label for="fullName" class="form-label">Họ và tên</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="fullName"
+                  placeholder="Nhập họ tên"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  placeholder="Nhập email"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="password" class="form-label">Mật khẩu mới</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  placeholder="Nhập mật khẩu mới"
+                  required
+                />
+              </div>
+
+              <button type="submit" class="btn btn-primary">Cập nhật</button>
+            </form>
+
+            <div id="resultMessage" class="mt-3"></div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="footer" class="text-light bg-dark py-3">
+      <div class="container text-center">
+        <p>
+          <a href="#" class="text-light footer-link">✉ Contact site support</a>
+        </p>
+        <p>
+          Bạn đang đăng nhập với tên
+          <a href="login.html" class="text-light" id="username-display"
+            >Đang tải...</a
+          >
+        </p>
+        <p><a id="footer-home-link" href="#" class="text-light footer-link">Trang chủ</a></p>
+      </div>
+    </footer>
+
+    <script>
+      const base_url = "http://localhost:8080/elearning";
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("id");
+      const role = JSON.parse(localStorage.getItem("roles"))[0].name; // Lấy role từ localStorage
+
+      // Gán đường dẫn theo vai trò
+      document.addEventListener("DOMContentLoaded", function () {
+        const logoLink = document.getElementById("logo-link");
+        const homeLink = document.getElementById("home-link");
+        const footerHomeLink = document.getElementById("footer-home-link");
+
+        if (role === "TEACHER") {
+          logoLink.href = "teacher-home.html";
+          homeLink.href = "teacher-home.html";
+          footerHomeLink.href = "teacher-home.html";
+
+          document.getElementById("header").classList.add("bg-primary");
+        document.getElementById("header").classList.remove("bg-dark");
+
+        document.getElementById("footer").classList.add("bg-primary");
+        document.getElementById("footer").classList.remove("bg-dark");
+        } else {
+          logoLink.href = "home.html";
+          homeLink.href = "home.html";
+          footerHomeLink.href = "home.html";
+        }
+
+        loadCourses();
+        const fullname = localStorage.getItem("fullname");
+        const displayElement = document.getElementById("username-display");
+        document.getElementById("fullName").value = fullname;
+        document.getElementById("email").value = localStorage.getItem("email");
+        displayElement.textContent = fullname
+          ? `${fullname} (Thoát)`
+          : "Khách (Thoát)";
+      });
+
+      // Load danh sách khóa học sidebar
+      async function loadCourses() {
+        const courseList = document.getElementById("course-list");
+
+        try {
+          const response = await fetch(`${base_url}/courses`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          const data = await response.json();
+
+          if (data.code === 200 && Array.isArray(data.result)) {
+            courseList.innerHTML = "";
+            data.result.forEach((course) => {
+              const li = document.createElement("li");
+              li.className = "nav-item";
+
+              const a = document.createElement("a");
+              a.className = "nav-link";
+              a.href = `course-detail.html?id=${course.id}`;
+              a.textContent = course.courseName;
+
+              li.appendChild(a);
+              courseList.appendChild(li);
+            });
+          } else {
+            courseList.innerHTML =
+              "<li class='nav-item text-danger p-2'>Không có khóa học nào.</li>";
+          }
+        } catch (error) {
+          console.error("Lỗi khi tải khóa học:", error);
+          courseList.innerHTML =
+            "<li class='nav-item text-danger p-2'>Không thể tải danh sách khóa học.</li>";
+        }
+      }
+
+      // Xử lý submit form chỉnh sửa thông tin
+      document
+        .getElementById("editProfileForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const fullName = document.getElementById("fullName").value;
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+
+          const userData = {
+            fullName: fullName,
+            email: email,
+            password: password,
+          };
+
+          fetch(`${base_url}/users/${userId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(userData),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.code === 200) {
+                document.getElementById(
+                  "resultMessage"
+                ).innerHTML = `<div class="alert alert-success">Cập nhật thành công!</div>`;
+              } else {
+                document.getElementById(
+                  "resultMessage"
+                ).innerHTML = `<div class="alert alert-danger">Cập nhật thất bại: ${
+                  data.message || "Có lỗi xảy ra"
+                }</div>`;
+              }
+            })
+            .catch((error) => {
+              console.error("Lỗi khi cập nhật:", error);
+              document.getElementById(
+                "resultMessage"
+              ).innerHTML = `<div class="alert alert-danger">Lỗi kết nối máy chủ.</div>`;
+            });
+        });
+    </script>
+  </body>
+</html>

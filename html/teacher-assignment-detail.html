@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý bài tập - Giao diện Giáo viên</title>
+    <link rel="stylesheet" href="/css/teacher-assignment-detail.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
+    <!-- Header  -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand" href="teacher-home.html"
+          >E-Learning giáo viên</a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="teacher-home.html">Trang chính</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="login.html">Đăng xuất</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 bg-light sidebar">
+          <div class="position-sticky">
+            <h4 class="p-3">Khóa học của tôi</h4>
+            <ul class="nav flex-column" id="course-list">
+              <!-- Sidebar course list will be injected here -->
+            </ul>
+          </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 teacher-section">
+          <div class="container container-main">
+            <div class="card">
+              <div class="assignment-header">
+                <h1 id="assignment-title">Tên bài tập</h1>
+                <div>
+                  <button
+                    class="btn btn-outline"
+                    onclick="openAssignmentModal()"
+                  >
+                    <i class="fas fa-edit"></i> Chỉnh sửa
+                  </button>
+                </div>
+              </div>
+
+              <div class="assignment-details">
+                <div class="detail-card">
+                  <div class="label">Mã bài tập</div>
+                  <div class="value" id="assignment-id">
+                    -
+                  </div>
+                </div>
+                <div class="detail-card">
+                  <div class="label">Ngày đến hạn</div>
+                  <div class="value" id="due-date">30/04/2025</div>
+                </div>
+                <div class="detail-card">
+                  <div class="label">Trạng thái</div>
+                  <div class="value">Đang mở</div>
+                </div>
+                <div class="detail-card">
+                  <div class="label">Thống kê nộp bài</div>
+                  <div class="value">
+                    <span id="submitted-count">2</span>/<span id="total-count"
+                      >3</span
+                    >
+                    sinh viên đã nộp
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="label">Mô tả bài tập</div>
+                <p
+                  id="assignment-description"
+                  style="margin-top: 10px; line-height: 1.5"
+                >
+                  Phải trình bày bài làm theo template GV gửi kèm. SV phải tự
+                  làm bài, không sao chép từ bạn bè hay Internet. Vi phạm sẽ bị
+                  0 điểm. Nếu gặp vấn đề khi nộp bài, hãy liên hệ GV qua email
+                  trước khi hết deadline.
+                </p>
+              </div>
+
+              <div class="tabs">
+                <div class="tab active" onclick="switchTab('submitted')">
+                  Đã nộp
+                  <span class="badge badge-count" id="submitted-badge">2</span>
+                </div>
+                <div class="tab" onclick="switchTab('not-submitted')">
+                  Chưa nộp
+                  <span class="badge badge-count" id="not-submitted-badge"
+                    >1</span
+                  >
+                </div>
+              </div>
+
+              <div class="tab-content active" id="submitted-tab">
+                <div class="search-box">
+                  <i class="fas fa-search"></i>
+                  <input
+                    type="text"
+                    placeholder="Tìm kiếm sinh viên..."
+                    id="search-submitted"
+                  />
+                </div>
+
+                <table id="submitted-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 40%">Sinh viên</th>
+                      <th style="width: 20%">Thời gian nộp</th>
+                      <th style="width: 20%">Trạng thái</th>
+                      <th style="width: 20%">Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody id="submitted-body">
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="tab-content" id="not-submitted-tab">
+                <div class="search-box">
+                  <i class="fas fa-search"></i>
+                  <input
+                    type="text"
+                    placeholder="Tìm kiếm sinh viên..."
+                    id="search-not-submitted"
+                  />
+                </div>
+
+                <table id="not-submitted-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 50%">Sinh viên</th>
+                      <th style="width: 25%">Trạng thái</th>
+                      <th style="width: 25%">Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody id="not-submitted-body">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <footer class="text-light bg-primary py-3 mt-4">
+      <div class="container text-center">
+        <p><a href="#" class="text-light">✉ Liên hệ hỗ trợ</a></p>
+        <p>
+          Đăng nhập với tên
+          <a href="login.html" class="text-light" id="username-display"
+            >Đang tải...</a
+          >
+        </p>
+        <p><a href="teacher-home.html" class="text-light">Trang chính</a></p>
+      </div>
+    </footer>
+
+    <!-- Modal chỉnh sửa bài tập -->
+    <div class="modal" id="assignment-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Chỉnh sửa bài tập</h2>
+          <button class="close-btn" onclick="closeAssignmentModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="edit-title">Tiêu đề bài tập</label>
+            <input type="text" id="edit-title" value="AI 2 da fix" />
+          </div>
+          <div class="form-group">
+            <label for="edit-description">Mô tả bài tập</label>
+            <textarea id="edit-description">
+Phải trình bày bài làm theo template GV gửi kèm. SV phải tự làm bài, không sao chép từ bạn bè hay Internet. Vi phạm sẽ bị 0 điểm. Nếu gặp vấn đề khi nộp bài, hãy liên hệ GV qua email trước khi hết deadline.</textarea
+            >
+          </div>
+          <div class="form-group">
+            <label for="edit-due-date">Ngày đến hạn</label>
+            <input
+              type="datetime-local"
+              id="edit-due-date"
+              value="2025-04-30T00:00"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeAssignmentModal()">
+            Hủy
+          </button>
+          <button class="btn btn-primary" onclick="saveAssignment()">
+            Lưu thay đổi
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal xác nhận xóa bài nộp -->
+    <div class="modal" id="delete-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Xác nhận xóa bài nộp</h2>
+          <button class="close-btn" onclick="closeDeleteModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Bạn có chắc chắn muốn xóa bài nộp của sinh viên này?</p>
+          <p>Hành động này không thể hoàn tác.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeDeleteModal()">
+            Hủy
+          </button>
+          <button class="btn btn-danger" onclick="confirmDelete()">
+            Xóa bài nộp
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Variables
+      const params = new URLSearchParams(window.location.search);
+      const assignmentId = params.get("id");
+      let currentStudentId = localStorage.getItem("id");
+      let token = localStorage.getItem("token"); // Giả định token đã lưu trong localStorage
+      const baseUrl = "http://localhost:8080/elearning";
+
+      // Functions for tab switching
+      function switchTab(tabName) {
+        // Hide all tabs
+        document.querySelectorAll(".tab-content").forEach((tab) => {
+          tab.classList.remove("active");
+        });
+
+        document.querySelectorAll(".tab").forEach((tab) => {
+          tab.classList.remove("active");
+        });
+
+        // Show selected tab
+        document.getElementById(`${tabName}-tab`).classList.add("active");
+        document
+          .querySelector(`.tab[onclick="switchTab('${tabName}')"]`)
+          .classList.add("active");
+      }
+
+      // Modal functions
+      function openAssignmentModal() {
+        fetch(`${baseUrl}/assignments/${assignmentId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    // Update UI
+                    document.getElementById('edit-title').value = data.result.title;
+                    document.getElementById('edit-description').textContent = data.result.description;
+                    document.getElementById('edit-due-date').textContent = formatDate(new Date(data.result.dueDate));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        document.getElementById("assignment-modal").style.display = "flex";
+      }
+
+      function closeAssignmentModal() {
+        document.getElementById("assignment-modal").style.display = "none";
+      }
+
+      function openDeleteModal(studentId) {
+        currentStudentId = studentId;
+        document.getElementById("delete-modal").style.display = "flex";
+      }
+
+      function closeDeleteModal() {
+        document.getElementById("delete-modal").style.display = "none";
+      }
+
+      // Save assignment changes
+      function saveAssignment() {
+        const title = document.getElementById("edit-title").value;
+        const description = document.getElementById("edit-description").value;
+        const dueDate = document.getElementById("edit-due-date").value + ":00";
+        // Show loading state
+        const modalBody = document.querySelector(".modal-body");
+        modalBody.classList.add("loading");
+
+        // Cấu trúc dữ liệu theo mẫu API đã cho
+        const payload = {
+          title: title,
+          description: description,
+          dueDate: dueDate,
+        };
+
+            fetch(`${baseUrl}/assignments/${assignmentId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    // Update UI
+                    document.getElementById('assignment-title').textContent = title;
+                    document.getElementById('assignment-description').textContent = description;
+                    document.getElementById('due-date').textContent = formatDate(new Date(dueDate));
+                    console.log(dueDate);
+                    // Hide loading and close modal
+                    modalBody.classList.remove('loading');
+                    closeAssignmentModal();
+                    
+                    // Show success message
+                    alert('Cập nhật bài tập thành công!');
+                } else {
+                    alert('Có lỗi xảy ra khi cập nhật bài tập!');
+                    modalBody.classList.remove('loading');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra khi cập nhật bài tập!');
+                modalBody.classList.remove('loading');
+            });
+      }
+
+      async function updateUI(){
+        //  Update UI
+          fetch(`${baseUrl}/assignments/${assignmentId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    // Update UI
+                    const assignmentResponse = data.result; 
+                    document.getElementById('assignment-id').textContent = assignmentResponse.id;
+                    document.getElementById('assignment-title').textContent = assignmentResponse.title;
+                    document.getElementById('assignment-description').textContent = assignmentResponse.description;
+                    document.getElementById('due-date').textContent = formatDateTime(new Date(assignmentResponse.dueDate));             
+                } else {
+                    console.log("Lỗi khi load dữ liệu bài tập");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+      }
+
+      // Delete submission
+      function deleteSubmission(studentId) {
+        openDeleteModal(studentId);
+      }
+
+      function confirmDelete() {
+        closeDeleteModal();
+
+        // Implement deletion logic here
+        fetch(`${baseUrl}/submissions/${assignmentId}/${currentStudentId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.code === 200) {
+              // Remove from submitted list
+              const row = document.querySelector(
+                `#submitted-body tr[data-id="${currentStudentId}"]`
+              );
+              if (row) {
+                row.remove();
+              }
+
+              // Update counts
+              updateCounts();
+
+              // Show success message
+              alert("Đã xóa bài nộp thành công!");
+
+              // Reload data to update not-submitted list
+              loadSubmissionData();
+            } else {
+              alert("Không thể xóa bài nộp.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Có lỗi xảy ra khi xóa bài nộp.");
+          });
+      }
+
+      // View submission
+      function viewSubmission(url) {
+        window.open(url, "_blank");
+      }
+
+      // Send reminder
+      function sendReminder(studentId) {
+        alert(`Đã gửi nhắc nhở đến sinh viên!`);
+      }
+
+      // Update counts function
+      function updateCounts() {
+        const submittedCount =
+          document.querySelectorAll("#submitted-body tr").length;
+        const notSubmittedCount = document.querySelectorAll(
+          "#not-submitted-body tr"
+        ).length;
+        const totalCount = submittedCount + notSubmittedCount;
+
+        document.getElementById("submitted-count").textContent = submittedCount;
+        document.getElementById("total-count").textContent = totalCount;
+        document.getElementById("submitted-badge").textContent = submittedCount;
+        document.getElementById("not-submitted-badge").textContent =
+          notSubmittedCount;
+      }
+
+      // Format date function
+      function formatDate(date) {
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+      }
+
+      // Format datetime function
+      function formatDateTime(dateString) {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+
+        return `${day}/${month}/${year} ${hours}:${minutes}`;
+      }
+
+      // Load submission data
+      function loadSubmissionData() {
+        // In a real application, this would make API calls to get the data
+        // For this example, we're using the data you provided
+
+        // Load submitted data
+        fetch(`${baseUrl}/submissions/all-submissions/${assignmentId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.code === 200) {
+              const submittedBody = document.getElementById("submitted-body");
+              submittedBody.innerHTML = "";
+
+              data.result.forEach((submission) => {
+                const student = submission.student;
+                const row = document.createElement("tr");
+                row.setAttribute("data-id", student.id);
+
+                const submissionDate = new Date(submission.submittedAt);
+                const dueDate = new Date(
+                  document.getElementById("edit-due-date").value
+                );
+
+                const isLate = submissionDate > dueDate;
+
+                row.innerHTML = `
+                            <td>
+                                <div>${student.fullName}</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">ID: ${
+                                  student.id
+                                }</div>
+                            </td>
+                            <td>${formatDateTime(submission.submittedAt)}</td>
+                            <td>
+                                <span class="status ${
+                                  isLate ? "late" : "submitted"
+                                }">
+                                    <i class="fas fa-${
+                                      isLate ? "clock" : "check-circle"
+                                    }"></i> 
+                                    ${isLate ? "Nộp trễ" : "Đã nộp"}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="action-btn" onclick="viewSubmission('${
+                                  submission.submissionUrl[0]
+                                }')">
+                                    <i class="fas fa-eye"></i> Xem
+                                </button>
+                                <button class="action-btn" onclick="deleteSubmission('${
+                                  student.id
+                                }')">
+                                    <i class="fas fa-trash"></i> Xóa
+                                </button>
+                            </td>
+                        `;
+
+                submittedBody.appendChild(row);
+              });
+            } else {
+              console.error("Error fetching submission data:", data);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+
+        // Load not submitted data
+        fetch(
+          `${baseUrl}/submissions/students-without-submission/${assignmentId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.code === 200) {
+              const notSubmittedBody =
+                document.getElementById("not-submitted-body");
+              notSubmittedBody.innerHTML = "";
+
+              data.result.forEach((student) => {
+                const row = document.createElement("tr");
+                row.setAttribute("data-id", student.id);
+
+                row.innerHTML = `
+                            <td>
+                                <div>${student.fullName}</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">ID: ${student.id}</div>
+                            </td>
+                            <td>
+                                <span class="status missing">
+                                    <i class="fas fa-exclamation-circle"></i> Chưa nộp
+                                </span>
+                            </td>
+                            <td>
+                                <button class="action-btn" onclick="sendReminder('${student.id}')">
+                                    <i class="fas fa-bell"></i> Nhắc nhở
+                                </button>
+                            </td>
+                        `;
+
+                notSubmittedBody.appendChild(row);
+              });
+            } else {
+              console.error("Error fetching not submitted data:", data);
+            }
+
+            // Update counts after both fetches are complete
+            updateCounts();
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+
+      // Search functions
+      document
+        .getElementById("search-submitted")
+        .addEventListener("input", function (e) {
+          const searchTerm = e.target.value.toLowerCase();
+          const rows = document.querySelectorAll("#submitted-body tr");
+
+          rows.forEach((row) => {
+            const studentName = row
+              .querySelector("td:first-child div:first-child")
+              .textContent.toLowerCase();
+            const studentId = row
+              .querySelector("td:first-child div:last-child")
+              .textContent.toLowerCase();
+
+            if (
+              studentName.includes(searchTerm) ||
+              studentId.includes(searchTerm)
+            ) {
+              row.style.display = "";
+            } else {
+              row.style.display = "none";
+            }
+          });
+        });
+
+      document
+        .getElementById("search-not-submitted")
+        .addEventListener("input", function (e) {
+          const searchTerm = e.target.value.toLowerCase();
+          const rows = document.querySelectorAll("#not-submitted-body tr");
+
+          rows.forEach((row) => {
+            const studentName = row
+              .querySelector("td:first-child div:first-child")
+              .textContent.toLowerCase();
+            const studentId = row
+              .querySelector("td:first-child div:last-child")
+              .textContent.toLowerCase();
+
+            if (
+              studentName.includes(searchTerm) ||
+              studentId.includes(searchTerm)
+            ) {
+              row.style.display = "";
+            } else {
+              row.style.display = "none";
+            }
+          });
+        });
+
+      // Download all submissions at once
+      function downloadAllSubmissions() {
+        alert("Đang tải xuống tất cả bài nộp. Vui lòng đợi...");
+        // In a real application, this would make an API call to get all submissions as a ZIP file
+      }
+
+      // Export submission data to Excel
+      function exportToExcel() {
+        alert("Đang xuất dữ liệu bài nộp ra Excel. Vui lòng đợi...");
+        // In a real application, this would generate an Excel file with submission data
+      }
+
+      // Function to handle bulk notifications
+      function notifyAll() {
+        const notSubmittedCount = document.querySelectorAll(
+          "#not-submitted-body tr"
+        ).length;
+
+        if (notSubmittedCount === 0) {
+          alert("Tất cả sinh viên đã nộp bài!");
+          return;
+        }
+
+        if (
+          confirm(
+            `Bạn có muốn gửi thông báo nhắc nhở đến tất cả ${notSubmittedCount} sinh viên chưa nộp bài?`
+          )
+        ) {
+          alert("Đã gửi thông báo thành công!");
+        }
+      }
+
+      // Add event listeners for keyboard shortcuts
+      document.addEventListener("keydown", function (e) {
+        // Ctrl+S to save assignment
+        if (
+          e.ctrlKey &&
+          e.key === "s" &&
+          document.getElementById("assignment-modal").style.display === "flex"
+        ) {
+          e.preventDefault();
+          saveAssignment();
+        }
+
+        // Escape to close modals
+        if (e.key === "Escape") {
+          if (
+            document.getElementById("assignment-modal").style.display === "flex"
+          ) {
+            closeAssignmentModal();
+          }
+          if (
+            document.getElementById("delete-modal").style.display === "flex"
+          ) {
+            closeDeleteModal();
+          }
+        }
+      });
+
+      // Add functionality to export buttons
+      function addExportButtons() {
+        const headerDiv = document.querySelector(".assignment-header > div");
+
+        // Add download all button
+        const downloadButton = document.createElement("button");
+        downloadButton.className = "btn btn-outline";
+        downloadButton.style.marginRight = "8px";
+        downloadButton.innerHTML = '<i class="fas fa-download"></i> Tải tất cả';
+        downloadButton.onclick = downloadAllSubmissions;
+        headerDiv.prepend(downloadButton);
+
+        // Add export to Excel button
+        const exportButton = document.createElement("button");
+        exportButton.className = "btn btn-outline";
+        exportButton.style.marginRight = "8px";
+        exportButton.innerHTML = '<i class="fas fa-file-excel"></i> Xuất Excel';
+        exportButton.onclick = exportToExcel;
+        headerDiv.prepend(exportButton);
+
+        // Add notify all button
+        const notifyButton = document.createElement("button");
+        notifyButton.className = "btn btn-outline";
+        notifyButton.style.marginRight = "8px";
+        notifyButton.innerHTML = '<i class="fas fa-bell"></i> Nhắc nhở tất cả';
+        notifyButton.onclick = notifyAll;
+        headerDiv.prepend(notifyButton);
+      }
+
+      // Function to initialize the page
+      function init() {
+        const fullname = localStorage.getItem("fullname");
+        const token = localStorage.getItem("token");
+        const displayElement = document.getElementById("username-display");
+
+        if (fullname && displayElement) {
+          displayElement.textContent = `${fullname} (Thoát)`;
+        }
+        // Set due date in the edit form
+        const dueDateInput = document.getElementById("edit-due-date");
+        dueDateInput.value = "2025-04-30T00:00";
+
+        // Load data
+        loadSubmissionData();
+        updateUI();
+        // sidebar
+        loadCourses(); // cập nhật sidebar
+
+        // Add export buttons
+        addExportButtons();
+
+        // Set up search functionality
+        document
+          .getElementById("search-submitted")
+          .addEventListener("input", function (e) {
+            filterTable("submitted-body", e.target.value);
+          });
+
+        document
+          .getElementById("search-not-submitted")
+          .addEventListener("input", function (e) {
+            filterTable("not-submitted-body", e.target.value);
+          });
+      }
+
+      // Function to filter table rows
+      function filterTable(tableId, searchTerm) {
+        searchTerm = searchTerm.toLowerCase();
+        const rows = document.querySelectorAll(`#${tableId} tr`);
+
+        rows.forEach((row) => {
+          const text = row.textContent.toLowerCase();
+          row.style.display = text.includes(searchTerm) ? "" : "none";
+        });
+      }
+
+      // Implement handling for re-uploading files for students
+      function uploadForStudent(studentId) {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".pdf,.doc,.docx";
+
+        input.onchange = (e) => {
+          if (e.target.files.length) {
+            const file = e.target.files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+
+            // In a real app, you would send this to an API endpoint
+            alert(`Đang tải lên tệp ${file.name} cho sinh viên...`);
+
+            // Simulating API call
+            setTimeout(() => {
+              alert("Tải lên thành công!");
+            }, 1500);
+          }
+        };
+
+        input.click();
+      }
+
+      // Add ability to download assignment data in various formats
+      function addDownloadOptions() {
+        const downloadFormats = [
+          { name: "Excel (.xlsx)", action: () => exportToExcel() },
+          { name: "CSV (.csv)", action: () => exportToCSV() },
+          { name: "PDF (.pdf)", action: () => exportToPDF() },
+        ];
+
+        const dropdown = document.createElement("div");
+        dropdown.className = "download-dropdown";
+        dropdown.style.position = "relative";
+        dropdown.style.display = "inline-block";
+
+        const button = document.createElement("button");
+        button.className = "btn btn-outline";
+        button.innerHTML =
+          '<i class="fas fa-download"></i> Xuất dữ liệu <i class="fas fa-caret-down"></i>';
+        button.style.marginRight = "8px";
+
+        const dropdownContent = document.createElement("div");
+        dropdownContent.className = "download-dropdown-content";
+        dropdownContent.style.display = "none";
+        dropdownContent.style.position = "absolute";
+        dropdownContent.style.backgroundColor = "#fff";
+        dropdownContent.style.minWidth = "160px";
+        dropdownContent.style.boxShadow = "0px 8px 16px 0px rgba(0,0,0,0.2)";
+        dropdownContent.style.zIndex = "1";
+        dropdownContent.style.borderRadius = "4px";
+        dropdownContent.style.overflow = "hidden";
+
+        downloadFormats.forEach((format) => {
+          const item = document.createElement("a");
+          item.href = "#";
+          item.style.padding = "12px 16px";
+          item.style.textDecoration = "none";
+          item.style.display = "block";
+          item.style.color = "var(--text-color)";
+          item.textContent = format.name;
+
+          item.addEventListener("click", (e) => {
+            e.preventDefault();
+            format.action();
+          });
+
+          item.addEventListener("mouseenter", () => {
+            item.style.backgroundColor = "var(--secondary-color)";
+          });
+
+          item.addEventListener("mouseleave", () => {
+            item.style.backgroundColor = "";
+          });
+
+          dropdownContent.appendChild(item);
+        });
+
+        dropdown.appendChild(button);
+        dropdown.appendChild(dropdownContent);
+
+        button.addEventListener("click", () => {
+          dropdownContent.style.display =
+            dropdownContent.style.display === "none" ? "block" : "none";
+        });
+
+        document.addEventListener("click", (e) => {
+          if (!dropdown.contains(e.target)) {
+            dropdownContent.style.display = "none";
+          }
+        });
+
+        document.querySelector(".assignment-header > div").prepend(dropdown);
+      }
+
+      // Additional export functions
+      function exportToCSV() {
+        alert("Đang xuất dữ liệu ra file CSV...");
+      }
+
+      function exportToPDF() {
+        alert("Đang xuất dữ liệu ra file PDF...");
+      }
+      async function loadCourses() {
+        const token = localStorage.getItem("token");
+        const courseList = document.getElementById("course-list");
+
+        try {
+          const response = await fetch(
+            "http://localhost:8080/elearning/courses",
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+
+          const data = await response.json();
+
+          if (data.code === 200 && Array.isArray(data.result)) {
+            courseList.innerHTML = "";
+            data.result.forEach((course) => {
+              const li = document.createElement("li");
+              li.className = "nav-item";
+
+              const a = document.createElement("a");
+              a.className = "nav-link";
+              a.href = `teacher-course-detail.html?id=${course.id}`;
+              a.textContent = course.courseName;
+
+              li.appendChild(a);
+              courseList.appendChild(li);
+            });
+          } else {
+            courseList.innerHTML =
+              "<li class='nav-item text-danger p-2'>Không có khóa học nào.</li>";
+          }
+        } catch (error) {
+          console.error("Lỗi khi tải khóa học:", error);
+          courseList.innerHTML =
+            "<li class='nav-item text-danger p-2'>Không thể tải danh sách khóa học.</li>";
+        }
+      }
+      // Initialize the page when DOM is loaded
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+  </body>
+</html>

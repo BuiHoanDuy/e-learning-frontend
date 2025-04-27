@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết bài giảng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .card-lesson {
+        background: #fff;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 40px;
+      }
+      iframe {
+        border-radius: 12px;
+      }
+      .edit-btn {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+      }
+      .edit-btn button {
+        background-color: #0d6efd;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand" href="teacher-home.html">E-Learning</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="home.html">Trang chủ</a></li>
+            <li class="nav-item"><a class="nav-link" href="login.html">Đăng xuất</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+       <!-- Main layout with sidebar and content -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <nav class="col-md-2 d-md-block bg-light sidebar min-vh-100">
+        <div class="position-sticky">
+          <h4 class="p-3">Khóa học của tôi</h4>
+          <ul class="nav flex-column" id="course-list">
+            <!-- Sidebar course list will be injected here -->
+          </ul>
+        </div>
+      </nav>
+   
+    <!-- Main Content -->
+    <main class="col-md-10 ms-sm-auto px-4">
+        <div class="position-relative">
+          <div class="edit-btn d-none" id="edit-btn">
+            <button class="btn btn-sm" onclick="showEditModal()">✏ Chỉnh sửa</button>
+            <button class="btn btn-sm btn-danger ms-2" onclick="confirmDelete()">🗑 Xóa</button>
+          </div>
+
+          <div class="card-lesson">
+            <h2 id="lesson-title">Đang tải tiêu đề...</h2>
+            <p class="text-muted"><strong>Ngày tạo:</strong> <span id="created-at">--</span></p>
+
+            <div class="mt-4">
+              <h5 class="text-primary">📚 Nội dung bài giảng</h5>
+              <p id="lesson-content" class="fs-5">Đang tải nội dung...</p>
+            </div>
+
+            <div id="video-section" class="mt-4">
+              <h5 class="text-primary">🎬 Video bài giảng</h5>
+              <div id="video-container" class="ratio ratio-16x9"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <form id="editForm">
+            <div class="modal-header">
+              <h5 class="modal-title">Chỉnh sửa bài giảng</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Tiêu đề</label>
+                <input type="text" class="form-control" id="edit-title" required />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Nội dung</label>
+                <textarea class="form-control" rows="5" id="edit-content" required></textarea>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Video URL</label>
+                <input type="url" class="form-control" id="edit-video" />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+              <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-light bg-primary py-4 mt-5">
+      <div class="container text-center">
+        <p><a href="#" class="text-light">✉ Hỗ trợ kỹ thuật</a></p>
+        <p>Đăng nhập với tên: <a href="login.html" class="text-light" id="username-display">Đang tải...</a></p>
+        <p><a href="teacher-home.html" class="text-light">Trang chính</a></p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+ // Load sidebar course list
+ async function loadCourses() {
+        const token = localStorage.getItem("token");
+        const courseList = document.getElementById("course-list");
+
+        try {
+          const response = await fetch("http://localhost:8080/elearning/courses", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          const data = await response.json();
+
+          if (data.code === 200 && Array.isArray(data.result)) {
+            courseList.innerHTML = "";
+            data.result.forEach((course) => {
+              const li = document.createElement("li");
+              li.className = "nav-item";
+
+              const a = document.createElement("a");
+              a.className = "nav-link";
+              a.href = `teacher-course-detail.html?id=${course.id}`;
+              a.textContent = course.courseName;
+
+              li.appendChild(a);
+              courseList.appendChild(li);
+            });
+          } else {
+            courseList.innerHTML = "<li class='nav-item text-danger p-2'>Không có khóa học nào.</li>";
+          }
+        } catch (error) {
+          console.error("Lỗi khi tải khóa học:", error);
+          courseList.innerHTML =
+            "<li class='nav-item text-danger p-2'>Không thể tải danh sách khóa học.</li>";
+        }
+      }
+
+      let currentLessonId;
+      let currentLessonData;
+
+      document.addEventListener("DOMContentLoaded", () => {
+        loadCourses(); // cập nhật sidebar
+        const token = localStorage.getItem("token");
+        const fullname = localStorage.getItem("fullname");
+        const roles = JSON.parse(localStorage.getItem("roles"));
+        const displayElement = document.getElementById("username-display");
+        if (fullname && displayElement) displayElement.textContent = `${fullname} (Thoát)`;
+
+        const isTeacher = roles && roles[0]?.name === "TEACHER";
+        if (isTeacher) document.getElementById("edit-btn").classList.remove("d-none");
+
+        const params = new URLSearchParams(window.location.search);
+        currentLessonId = params.get("id");
+console.log(currentLessonId);
+        if (!currentLessonId) {
+          alert("Không tìm thấy bài giảng!");
+          return;
+        }
+
+        fetch(`http://localhost:8080/elearning/lessons/${currentLessonId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.code === 200 && data.result) {
+              const lesson = data.result;
+              currentLessonData = lesson;
+              document.getElementById("lesson-title").textContent = lesson.title;
+              document.getElementById("lesson-content").textContent = lesson.content;
+              document.getElementById("created-at").textContent = new Date(lesson.createdAt).toLocaleString("vi-VN");
+
+              const videoContainer = document.getElementById("video-container");
+              if (lesson.videoUrl?.includes("youtube.com")) {
+                const videoId = lesson.videoUrl.split("v=")[1];
+                videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+              } else if (lesson.videoUrl) {
+                videoContainer.innerHTML = `<a href="${lesson.videoUrl}" target="_blank">Xem video tại đây</a>`;
+              } else {
+                document.getElementById("video-section").innerHTML = '<p class="text-muted">Không có video.</p>';
+              }
+            } else {
+              alert("Không thể tải thông tin bài giảng.");
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            alert("Lỗi khi tải bài giảng.");
+          });
+      });
+
+      function showEditModal() {
+        if (!currentLessonData) return;
+        document.getElementById("edit-title").value = currentLessonData.title || "";
+        document.getElementById("edit-content").value = currentLessonData.content || "";
+        document.getElementById("edit-video").value = currentLessonData.videoUrl || "";
+
+        const modal = new bootstrap.Modal(document.getElementById("editModal"));
+        modal.show();
+      }
+      function confirmDelete() {
+  if (!currentLessonId) return;
+  const confirmResult = confirm("Bạn có chắc chắn muốn xóa bài giảng này không?");
+  if (!confirmResult) return;
+
+  const token = localStorage.getItem("token");
+
+  fetch(`http://localhost:8080/elearning/lessons/${currentLessonId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      if (res.ok) {
+        alert("Đã xóa bài giảng thành công.");
+        window.location.href = "teacher-course-detail.html"; // chuyển về trang chủ hoặc danh sách bài giảng
+      } else {
+        return res.json().then((data) => {
+          throw new Error(data.message || "Xóa bài giảng thất bại.");
+        });
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      alert("Lỗi khi xóa bài giảng: " + err.message);
+    });
+}
+
+      document.getElementById("editForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const token = localStorage.getItem("token");
+
+        const updatedLesson = {
+          title: document.getElementById("edit-title").value,
+          content: document.getElementById("edit-content").value,
+          videoUrl: document.getElementById("edit-video").value,
+        };
+
+        fetch(`http://localhost:8080/elearning/lessons/${currentLessonId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(updatedLesson),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.code === 200) {
+              alert("Cập nhật bài giảng thành công!");
+              location.reload(); // Reload để cập nhật lại thông tin
+            } else {
+              alert("Cập nhật thất bại: " + data.message);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            alert("Lỗi khi cập nhật bài giảng.");
+          });
+      });
+    </script>
+  </body>
+</html>

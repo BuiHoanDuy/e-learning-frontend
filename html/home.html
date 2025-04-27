@@ -55,7 +55,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="home.html">Home</a>
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="login.html">Logout</a>
             </li>
@@ -70,6 +72,7 @@
         <!-- Sidebar -->
         <nav class="col-md-3 col-lg-2 bg-light sidebar">
           <div class="position-sticky">
+            <h5 class="p-3"><a href="update-user.html" style="text-decoration: none;">Sửa hồ sơ cá nhân</a></h5>
             <h4 class="p-3">Khóa học của tôi</h4>
             <ul class="nav flex-column" id="course-list">
               <!-- Sidebar course list will be injected here -->
@@ -80,6 +83,19 @@
         <!-- Main content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
           <h2 class="mt-4">Danh sách khóa học</h2>
+          <div class="input-group mb-4">
+            <input
+              type="text"
+              id="join-code-input"
+              class="form-control"
+              placeholder="Nhập mã tham gia lớp học"
+            />
+            <button class="btn btn-outline-primary" id="search-course-btn">
+              Tìm kiếm
+            </button>
+          </div>
+          <div id="search-result"></div>
+
           <div id="course-cards" class="row">
             <!-- Course cards will be injected here -->
           </div>
@@ -90,12 +106,16 @@
     <!-- Footer -->
     <footer class="text-light bg-dark py-3 mt-4">
       <div class="container text-center">
-        <p><a href="#" class="text-light footer-link">✉ Contact site support</a></p>
+        <p>
+          <a href="#" class="text-light footer-link">✉ Contact site support</a>
+        </p>
         <p>
           Bạn đang đăng nhập với tên
-          <a href="login.html" class="text-light" id="username-display">Đang tải...</a>
+          <a href="login.html" class="text-light" id="username-display"
+            >Đang tải...</a
+          >
         </p>
-        <p><a href="#" class="text-light footer-link">Trang chủ</a></p>
+        <p><a href="home.html" class="text-light footer-link">Trang chủ</a></p>
       </div>
     </footer>
 
@@ -105,7 +125,9 @@
       document.addEventListener("DOMContentLoaded", function () {
         const fullname = localStorage.getItem("fullname");
         const displayElement = document.getElementById("username-display");
-        displayElement.textContent = fullname ? `${fullname} (Thoát)` : "Khách (Thoát)";
+        displayElement.textContent = fullname
+          ? `${fullname} (Thoát)`
+          : "Khách (Thoát)";
       });
 
       // Format ISO date to dd/mm/yyyy hh:mm
@@ -127,9 +149,12 @@
         const courseList = document.getElementById("course-list");
 
         try {
-          const response = await fetch("http://localhost:8080/elearning/courses", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          const response = await fetch(
+            "http://localhost:8080/elearning/courses",
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
 
           const data = await response.json();
 
@@ -148,7 +173,8 @@
               courseList.appendChild(li);
             });
           } else {
-            courseList.innerHTML = "<li class='nav-item text-danger p-2'>Không có khóa học nào.</li>";
+            courseList.innerHTML =
+              "<li class='nav-item text-danger p-2'>Không có khóa học nào.</li>";
           }
         } catch (error) {
           console.error("Lỗi khi tải khóa học:", error);
@@ -163,9 +189,12 @@
         const courseCardsContainer = document.getElementById("course-cards");
 
         try {
-          const response = await fetch("http://localhost:8080/elearning/courses", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          const response = await fetch(
+            "http://localhost:8080/elearning/courses",
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
 
           const data = await response.json();
 
@@ -188,11 +217,15 @@
 
               const teacher = document.createElement("p");
               teacher.className = "card-subtitle mb-2";
-              teacher.textContent = `GV: ${course.teacher?.fullName ?? "Không rõ"}`;
+              teacher.textContent = `GV: ${
+                course.teacher?.fullName ?? "Không rõ"
+              }`;
 
               const createdAt = document.createElement("p");
               createdAt.className = "card-date";
-              createdAt.textContent = `Tạo ngày: ${formatDate(course.createdAt)}`;
+              createdAt.textContent = `Tạo ngày: ${formatDate(
+                course.createdAt
+              )}`;
 
               const btn = document.createElement("a");
               btn.href = `course-detail.html?id=${course.id}`;
@@ -209,11 +242,90 @@
               courseCardsContainer.appendChild(col);
             });
           } else {
-            courseCardsContainer.innerHTML = "<p class='text-danger'>Không có khóa học nào.</p>";
+            courseCardsContainer.innerHTML =
+              "<p class='text-danger'>Không có khóa học nào.</p>";
           }
         } catch (error) {
           console.error("Lỗi khi tải danh sách khóa học:", error);
-          courseCardsContainer.innerHTML = "<p class='text-danger'>Không thể tải khóa học.</p>";
+          courseCardsContainer.innerHTML =
+            "<p class='text-danger'>Không thể tải khóa học.</p>";
+        }
+      }
+      // Tìm và hiển thị khóa học theo mã JoinCode
+      async function searchCourseByJoinCode() {
+        const joinCode = document
+          .getElementById("join-code-input")
+          .value.trim();
+        const resultDiv = document.getElementById("search-result");
+        const token = localStorage.getItem("token");
+
+        if (!joinCode) {
+          resultDiv.innerHTML =
+            "<p class='text-danger'>Vui lòng nhập mã lớp học.</p>";
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `http://localhost:8080/elearning/courses/join-code?joinCode=${joinCode}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+
+          const data = await response.json();
+
+          if (data.code === 200 && data.result) {
+            const course = data.result;
+
+            resultDiv.innerHTML = `
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">${course.courseName}</h5>
+            <p class="card-subtitle mb-2">GV: ${
+              course.teacher?.fullName ?? "Không rõ"
+            }</p>
+            <p class="card-date">Tạo ngày: ${formatDate(course.createdAt)}</p>
+            <button class="btn btn-success mt-2" onclick="joinCourse('${
+              course.id
+            }')">Tham gia</button>
+          </div>
+        </div>
+      `;
+            console.log(course);
+          } else {
+            resultDiv.innerHTML = `<p class='text-warning'>Không tìm thấy khóa học với mã: <strong>${joinCode}</strong></p>`;
+          }
+        } catch (error) {
+          console.error("Lỗi khi tìm khóa học:", error);
+          resultDiv.innerHTML =
+            "<p class='text-danger'>Không thể tìm khóa học.</p>";
+        }
+      }
+      async function joinCourse(courseId) {
+        const token = localStorage.getItem("token");
+        try {
+          const response = await fetch(
+            `http://localhost:8080/elearning/courses/enrollments/${courseId}`,
+            {
+              method: "POST",
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+
+          const data = await response.json();
+
+          if (data.code === 200) {
+            alert("Bạn đã tham gia khóa học thành công!");
+            loadCourses(); // cập nhật sidebar
+            loadCourseCards(); // cập nhật danh sách chính
+            document.getElementById("search-result").innerHTML = "";
+          } else {
+            alert(data.message || "Không thể tham gia khóa học.");
+          }
+        } catch (error) {
+          console.error("Lỗi khi tham gia khóa học:", error);
+          alert("Đã xảy ra lỗi khi tham gia lớp học.");
         }
       }
 
@@ -221,6 +333,9 @@
       document.addEventListener("DOMContentLoaded", () => {
         loadCourses();
         loadCourseCards();
+        document
+          .getElementById("search-course-btn")
+          .addEventListener("click", searchCourseByJoinCode);
       });
     </script>
   </body>

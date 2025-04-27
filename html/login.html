@@ -96,14 +96,20 @@
                 if (myInfoData.code === 200) {
                     // Save user full name and other info to localStorage
                     const userInfo = myInfoData.result;
+                    console.log(userInfo);
                     localStorage.setItem('id', userInfo.id);
                     localStorage.setItem('fullname', userInfo.fullName);
                     localStorage.setItem('email', userInfo.email);
                     localStorage.setItem('username', userInfo.username);
                     localStorage.setItem('roles', JSON.stringify(userInfo.roles));  // Save roles as a string
 
-                    // Redirect to Home page or other page after successful login
-                    window.location.href = "home.html"; // Replace with your home page URL
+                    if (userInfo.roles[0].name === "TEACHER") {
+                        window.location.href = "teacher-home.html"; // Replace with your home page URL
+                    }
+                    else if (userInfo.roles[0].name === "ADMIN"){ 
+                    window.location.href = "admin-home.html";}
+                    else  {
+                    window.location.href = "home.html";}
                 } else {
                     errorMessage.textContent = "Failed to fetch user info.";
                 }
