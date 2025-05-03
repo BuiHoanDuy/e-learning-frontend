@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý Roles và Permissions - E-Learning</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/css/admin-style.css" />
+    <link rel="stylesheet" href="/css/admin-role.css" />
+  </head>
+  <body>
+    <!-- Sidebar (Giống như trong mẫu) -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h3>E-Learning Admin</h3>
+        <p>Quản trị hệ thống</p>
+      </div>
+      <div class="sidebar-menu">
+        <a href="admin-home.html" class="menu-item">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Tổng quan</span>
+        </a>
+        <a href="admin-users.html" class="menu-item">
+          <i class="fas fa-users"></i>
+          <span>Quản lý người dùng</span>
+        </a>
+        <a href="admin-roles-permissions.html" class="menu-item active">
+          <i class="fas fa-lock"></i>
+          <span>Quản lý quyền hạn</span>
+        </a>
+        <a href="admin-courses.html" class="menu-item">
+          <i class="fas fa-book"></i>
+          <span>Quản lý khóa học</span>
+        </a>
+        <a href="admin-settings.html" class="menu-item">
+          <i class="fas fa-cog"></i>
+          <span>Cài đặt</span>
+        </a>
+        <a href="login.html" class="menu-item">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Đăng xuất</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="content-header">
+        <h2>Quản lý Roles và Permissions</h2>
+      </div>
+
+      <!-- Tabs Navigation -->
+      <div class="tabs">
+        <button class="tab-btn active" onclick="openTab('permissions-tab')">Quản lý Permissions</button>
+        <button class="tab-btn" onclick="openTab('roles-tab')">Quản lý Roles</button>
+      </div>
+
+      <!-- Permissions Tab -->
+      <div id="permissions-tab" class="tab-content active">
+        <div class="section-header">
+          <h3>Danh sách Permissions</h3>
+          <button class="btn btn-primary" onclick="openPermissionModal()">
+            <i class="fas fa-plus"></i> Thêm Permission
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table id="permissions-table">
+            <thead>
+              <tr>
+                <th>Tên Permission</th>
+                <th>Mô tả</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="permissions-list">
+              <!-- Permissions will be loaded here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Roles Tab -->
+      <div id="roles-tab" class="tab-content">
+        <div class="section-header">
+          <h3>Danh sách Roles</h3>
+          <button class="btn btn-primary" onclick="openRoleModal()">
+            <i class="fas fa-plus"></i> Thêm Role
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table id="roles-table">
+            <thead>
+              <tr>
+                <th>Tên Role</th>
+                <th>Mô tả</th>
+                <th>Permissions</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="roles-list">
+              <!-- Roles will be loaded here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Permission Modal -->
+    <div id="permission-modal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closePermissionModal()">&times;</span>
+        <h2>Thêm Permission Mới</h2>
+        <form id="permission-form">
+          <div class="form-group">
+            <label for="permission-name">Tên Permission:</label>
+            <input type="text" id="permission-name" required>
+          </div>
+          <div class="form-group">
+            <label for="permission-description">Mô tả:</label>
+            <textarea id="permission-description" required></textarea>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <button type="button" class="btn btn-secondary" onclick="closePermissionModal()">Hủy</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Role Modal -->
+    <div id="role-modal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeRoleModal()">&times;</span>
+        <h2 id="role-modal-title">Thêm Role Mới</h2>
+        <form id="role-form">
+          <div class="form-group">
+            <label for="role-name">Tên Role:</label>
+            <input type="text" id="role-name" required>
+          </div>
+          <div class="form-group">
+            <label for="role-description">Mô tả:</label>
+            <textarea id="role-description" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Permissions:</label>
+            <div id="permissions-checkboxes" class="checkbox-group">
+              <!-- Permissions checkboxes will be loaded here -->
+            </div>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <button type="button" class="btn btn-secondary" onclick="closeRoleModal()">Hủy</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div id="confirm-modal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeConfirmModal()">&times;</span>
+        <h2>Xác nhận xóa</h2>
+        <p>Bạn có chắc chắn muốn xóa <span id="delete-item-name"></span>?</p>
+        <div class="form-group">
+          <button type="button" class="btn btn-danger" id="confirm-delete-btn">Xóa</button>
+          <button type="button" class="btn btn-secondary" onclick="closeConfirmModal()">Hủy</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Base URL for API calls
+      const BASE_URL = "http://localhost:8080/elearning";
+      let token = localStorage.getItem("token");
+
+      // Global variables
+      let permissions = [];
+      let roles = [];
+      let currentEditRole = null;
+
+      // DOM Elements
+      document.addEventListener('DOMContentLoaded', function() {
+        // Initialize the page
+        loadPermissions();
+        loadRoles();
+
+        // Add event listeners
+        document.getElementById('permission-form').addEventListener('submit', handlePermissionSubmit);
+        document.getElementById('role-form').addEventListener('submit', handleRoleSubmit);
+      });
+
+      // Tab navigation
+      function openTab(tabId) {
+        // Hide all tab contents
+        const tabContents = document.getElementsByClassName('tab-content');
+        for (let i = 0; i < tabContents.length; i++) {
+          tabContents[i].classList.remove('active');
+        }
+        
+        // Remove active class from all tab buttons
+        const tabButtons = document.getElementsByClassName('tab-btn');
+        for (let i = 0; i < tabButtons.length; i++) {
+          tabButtons[i].classList.remove('active');
+        }
+        
+        // Show the current tab and add active class to the button
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+      }
+
+      // Permissions Functions
+      async function loadPermissions() {
+        try {
+          const response = await fetch(`${BASE_URL}/permissions`, {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+          const data = await response.json();
+          
+          if (data.code === 200 && data.result) {
+            permissions = data.result;
+            renderPermissionsList();
+            renderPermissionsCheckboxes();
+          } else {
+            showMessage('Lỗi khi tải danh sách permissions.');
+          }
+        } catch (error) {
+          console.error('Error loading permissions:', error);
+          showMessage('Đã xảy ra lỗi khi kết nối với máy chủ.');
+        }
+      }
+
+      function renderPermissionsList() {
+        const permissionsList = document.getElementById('permissions-list');
+        permissionsList.innerHTML = '';
+        
+        if (permissions.length === 0) {
+          permissionsList.innerHTML = '<tr><td colspan="3" class="text-center">Không có permissions nào.</td></tr>';
+          return;
+        }
+        
+        permissions.forEach(permission => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${permission.name}</td>
+            <td>${permission.description}</td>
+            <td>
+              <button class="btn btn-sm btn-danger" onclick="confirmDeletePermission('${permission.name}')">
+                <i class="fas fa-trash"></i> Xóa
+              </button>
+            </td>
+          `;
+          permissionsList.appendChild(row);
+        });
+      }
+
+      function renderPermissionsCheckboxes() {
+        const checkboxesContainer = document.getElementById('permissions-checkboxes');
+        checkboxesContainer.innerHTML = '';
+        
+        if (permissions.length === 0) {
+          checkboxesContainer.innerHTML = '<p>Không có permissions nào. Vui lòng tạo permissions trước.</p>';
+          return;
+        }
+        
+        permissions.forEach(permission => {
+          const checkbox = document.createElement('div');
+          checkbox.classList.add('checkbox-item');
+          checkbox.innerHTML = `
+            <input type="checkbox" id="perm-${permission.name}" value="${permission.name}">
+            <label for="perm-${permission.name}">${permission.name} - ${permission.description}</label>
+          `;
+          checkboxesContainer.appendChild(checkbox);
+        });
+      }
+
+      function openPermissionModal() {
+        document.getElementById('permission-name').value = '';
+        document.getElementById('permission-description').value = '';
+        document.getElementById('permission-modal').style.display = 'block';
+      }
+
+      function closePermissionModal() {
+        document.getElementById('permission-modal').style.display = 'none';
+      }
+
+      async function handlePermissionSubmit(event) {
+        event.preventDefault();
+        
+        const name = document.getElementById('permission-name').value;
+        const description = document.getElementById('permission-description').value;
+        
+        try {
+          const response = await fetch(`${BASE_URL}/permissions`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ name, description })
+          });
+          
+          const data = await response.json();
+          
+          if (data.code === 200) {
+            closePermissionModal();
+            showMessage('Permission đã được tạo thành công!');
+            loadPermissions(); // Reload permissions list
+          } else {
+            showMessage(`Lỗi: ${data.message || 'Không thể tạo permission.'}`);
+          }
+        } catch (error) {
+          console.error('Error creating permission:', error);
+          showMessage('Đã xảy ra lỗi khi kết nối với máy chủ.');
+        }
+      }
+
+      function confirmDeletePermission(permissionName) {
+        document.getElementById('delete-item-name').textContent = `permission "${permissionName}"`;
+        document.getElementById('confirm-delete-btn').onclick = () => deletePermission(permissionName);
+        document.getElementById('confirm-modal').style.display = 'block';
+      }
+
+      async function deletePermission(permissionName) {
+        try {
+          const response = await fetch(`${BASE_URL}/permissions/${permissionName}`, {
+            method: 'DELETE',
+            Authorization: `Bearer ${token}`
+          });
+          
+          const data = await response.json();
+          
+          if (data.code === 200) {
+            closeConfirmModal();
+            showMessage('Permission đã được xóa thành công!');
+            loadPermissions(); // Reload permissions list
+          } else {
+            closeConfirmModal();
+            showMessage(`Lỗi: ${data.message || 'Không thể xóa permission.'}`);
+          }
+        } catch (error) {
+          console.error('Error deleting permission:', error);
+          closeConfirmModal();
+          showMessage('Đã xảy ra lỗi khi kết nối với máy chủ.');
+        }
+      }
+
+      // Roles Functions
+      async function loadRoles() {
+        try {
+          const response = await fetch(`${BASE_URL}/roles`, {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+          const data = await response.json();
+          
+          if (data.code === 200 && data.result) {
+            roles = data.result;
+            renderRolesList();
+          } else {
+            showMessage('Lỗi khi tải danh sách roles.');
+          }
+        } catch (error) {
+          console.error('Error loading roles:', error);
+          showMessage('Đã xảy ra lỗi khi kết nối với máy chủ.');
+        }
+      }
+
+      function renderRolesList() {
+        const rolesList = document.getElementById('roles-list');
+        rolesList.innerHTML = '';
+        
+        if (roles.length === 0) {
+          rolesList.innerHTML = '<tr><td colspan="4" class="text-center">Không có roles nào.</td></tr>';
+          return;
+        }
+        
+        roles.forEach(role => {
+          const permissionsText = role.permissions.length > 0 
+            ? role.permissions.map(p => p.name).join(', ') 
+            : 'Không có quyền nào';
+          
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${role.name}</td>
+            <td>${role.description}</td>
+            <td>${permissionsText}</td>
+            <td>
+              <button class="btn btn-sm btn-primary" onclick="editRole('${role.name}')">
+                <i class="fas fa-edit"></i> Sửa
+              </button>
+              <button class="btn btn-sm btn-danger" onclick="confirmDeleteRole('${role.name}')">
+                <i class="fas fa-trash"></i> Xóa
+              </button>
+            </td>
+          `;
+          rolesList.appendChild(row);
+        });
+      }
+
+      function openRoleModal() {
+        currentEditRole = null;
+        document.getElementById('role-modal-title').textContent = 'Thêm Role Mới';
+        document.getElementById('role-name').value = '';
+        document.getElementById('role-description').value = '';
+        document.getElementById('role-name').disabled = false;
+        
+        // Uncheck all permissions
+        const checkboxes = document.querySelectorAll('#permissions-checkboxes input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+          checkbox.checked = false;
+        });
+        
+        document.getElementById('role-modal').style.display = 'block';
+      }
+
+      function editRole(roleName) {
+        const role = roles.find(r => r.name === roleName);
+        if (!role) return;
+        
+        currentEditRole = role;
+        document.getElementById('role-modal-title').textContent = 'Chỉnh Sửa Role';
+        document.getElementById('role-name').value = role.name;
+        document.getElementById('role-description').value = role.description;
+        document.getElementById('role-name').disabled = true;
+        
+        // Check permissions that belong to this role
+        const checkboxes = document.querySelectorAll('#permissions-checkboxes input[type="checkbox"]');
+        const rolePermissionNames = role.permissions.map(p => p.name);
+        
+        checkboxes.forEach(checkbox => {
+          checkbox.checked = rolePermissionNames.includes(checkbox.value);
+        });
+        
+        document.getElementById('role-modal').style.display = 'block';
+      }
+
+      function closeRoleModal() {
+        document.getElementById('role-modal').style.display = 'none';
+      }
+
+      async function handleRoleSubmit(event) {
+        event.preventDefault();
+        
+        const name = document.getElementById('role-name').value;
+        const description = document.getElementById('role-description').value;
+        
+        // Get checked permissions
+        const checkedPermissions = [];
+        const checkboxes = document.querySelectorAll('#permissions-checkboxes input[type="checkbox"]:checked');
+        checkboxes.forEach(checkbox => {
+          checkedPermissions.push(checkbox.value);
+        });
+        
+        try {
+          let url, method;
+          
+          if (currentEditRole) {
+            // Update existing role
+            url = `${BASE_URL}/roles/${name}`;
+            method = 'PUT';
+          } else {
+            // Create new role
+            url = `${BASE_URL}/roles`;
+            method = 'POST';
+          }
+          
+          const response = await fetch(url, {
+            method: method,
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              name,
+              description,
+              permissions: checkedPermissions
+            })
+          });
+          
+          const data = await response.json();
+          
+          if (data.code === 200) {
+            closeRoleModal();
+            showMessage(`Role đã được ${currentEditRole ? 'cập nhật' : 'tạo'} thành công!`);
+            loadRoles(); // Reload roles list
+          } else {
+            showMessage(`Lỗi: ${data.message || `Không thể ${currentEditRole ? 'cập nhật' : 'tạo'} role.`}`);
+          }
+        } catch (error) {
+          console.error(`Error ${currentEditRole ? 'updating' : 'creating'} role:`, error);
+          showMessage('Đã xảy ra lỗi khi kết nối với máy chủ.');
+        }
+      }
+
+      function confirmDeleteRole(roleName) {
+        document.getElementById('delete-item-name').textContent = `role "${roleName}"`;
+        document.getElementById('confirm-delete-btn').onclick = () => deleteRole(roleName);
+        document.getElementById('confirm-modal').style.display = 'block';
+      }
+
+      async function deleteRole(roleName) {
+        try {
+          const response = await fetch(`${BASE_URL}/roles/${roleName}`, {
+            method: 'DELETE',
+            Authorization: `Bearer ${token}`,
+          });
+          
+          const data = await response.json();
+          
+          if (data.code === 200) {
+            closeConfirmModal();
+            showMessage('Role đã được xóa thành công!');
+            loadRoles(); // Reload roles list
+          } else {
+            closeConfirmModal();
+            showMessage(`Lỗi: ${data.message || 'Không thể xóa role.'}`);
+          }
+        } catch (error) {
+          console.error('Error deleting role:', error);
+          closeConfirmModal();
+          showMessage('Đã xảy ra lỗi khi kết nối với máy chủ.');
+        }
+      }
+
+      function closeConfirmModal() {
+        document.getElementById('confirm-modal').style.display = 'none';
+      }
+
+      // Utility functions
+      function showMessage(message) {
+        // Replace with your preferred notification method
+        alert(message);
+      }
+    </script>
+  </body>
+</html>

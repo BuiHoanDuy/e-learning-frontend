@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý người dùng - E-Learning</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/css/admin-style.css" />
+    <link rel="stylesheet" href="/css/admin-users.css" />
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h3>E-Learning Admin</h3>
+        <p>Quản trị hệ thống</p>
+      </div>
+      <div class="sidebar-menu">
+        <a href="admin-home.html" class="menu-item">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Tổng quan</span>
+        </a>
+        <a href="admin-users.html" class="menu-item active">
+          <i class="fas fa-users"></i>
+          <span>Quản lý người dùng</span>
+        </a>
+        <a href="admin-roles-permissions.html" class="menu-item">
+          <i class="fas fa-lock"></i>
+          <span>Quản lý quyền hạn</span>
+        </a>
+        <a href="admin-courses.html" class="menu-item">
+          <i class="fas fa-book"></i>
+          <span>Quản lý khóa học</span>
+        </a>
+        <a href="admin-settings.html" class="menu-item">
+          <i class="fas fa-cog"></i>
+          <span>Cài đặt</span>
+        </a>
+        <a href="login.html" class="menu-item">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Đăng xuất</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="header">
+        <h2>Quản lý người dùng</h2>
+        <div class="user-profile">
+          <img src="" alt="Admin Avatar" />
+          <div class="user-info">
+            <span class="name">Admin</span>
+            <span class="role">Quản trị viên</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Management Dashboard -->
+      <div class="dashboard-container">
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+          <button class="tab-btn active" onclick="openTab('all-users')">
+            Tất cả người dùng
+          </button>
+          <button class="tab-btn" onclick="openTab('pending-users')">
+            Tài khoản chờ duyệt <span id="pending-count" class="badge">0</span>
+          </button>
+        </div>
+
+        <!-- All Users Tab -->
+        <div id="all-users" class="tab-content active">
+          <div class="action-bar">
+            <div class="search-container">
+              <input
+                type="text"
+                id="user-search"
+                placeholder="Tìm kiếm người dùng..."
+                onkeyup="searchUsers()"
+              />
+              <i class="fas fa-search search-icon"></i>
+            </div>
+            <div class="filter-container">
+              <select id="role-filter" onchange="filterUsers()">
+                <option value="all">Tất cả vai trò</option>
+                <option value="Student">Học viên</option>
+                <option value="Teacher">Giảng viên</option>
+                <option value="Admin">Quản trị viên</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table id="users-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Họ và tên</th>
+                  <th>Email</th>
+                  <th>Vai trò</th>
+                  <th>Ngày tạo</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body">
+                <!-- User data will be loaded here -->
+              </tbody>
+            </table>
+            <div id="loading-users" class="loading">
+              <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+            </div>
+            <div id="no-users" class="no-data" style="display: none">
+              Không tìm thấy người dùng nào.
+            </div>
+          </div>
+
+          <div class="pagination">
+            <button id="prev-page" onclick="previousPage()">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <div id="page-numbers"></div>
+            <button id="next-page" onclick="nextPage()">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Pending Users Tab -->
+        <div id="pending-users" class="tab-content">
+          <div class="action-bar">
+            <div class="search-container">
+              <input
+                type="text"
+                id="pending-search"
+                placeholder="Tìm kiếm tài khoản..."
+                onkeyup="searchPendingUsers()"
+              />
+              <i class="fas fa-search search-icon"></i>
+            </div>
+            <button
+              id="approve-all-btn"
+              class="btn-primary"
+              onclick="approveAllAccounts()"
+            >
+              <i class="fas fa-check-double"></i> Phê duyệt tất cả
+            </button>
+          </div>
+
+          <div class="table-container">
+            <table id="pending-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Họ và tên</th>
+                  <th>Email</th>
+                  <th>Vai trò</th>
+                  <th>Ngày đăng ký</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="pending-table-body">
+                <!-- Pending user data will be loaded here -->
+              </tbody>
+            </table>
+            <div id="loading-pending" class="loading">
+              <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+            </div>
+            <div id="no-pending" class="no-data" style="display: none">
+              Không có tài khoản nào đang chờ phê duyệt.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // API endpoint
+      const BASE_URL = "http://localhost:8080/elearning";
+      // Sau khi sửa:
+      let token = localStorage.getItem("token");
+      if (!token) {
+        alert("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại!");
+        window.location.href = "login.html";
+      }
+      // Global variables
+      let allUsers = [];
+      let pendingUsers = [];
+      let currentPage = 1;
+      const usersPerPage = 10;
+
+      // Initialize when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        loadAllUsers();
+        loadPendingUsers();
+      });
+
+      // Tab functionality
+      function openTab(tabName) {
+        // Hide all tab contents
+        const tabContents = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < tabContents.length; i++) {
+          tabContents[i].classList.remove("active");
+        }
+
+        // Remove active class from all tab buttons
+        const tabButtons = document.getElementsByClassName("tab-btn");
+        for (let i = 0; i < tabButtons.length; i++) {
+          tabButtons[i].classList.remove("active");
+        }
+
+        // Show the selected tab content
+        document.getElementById(tabName).classList.add("active");
+
+        // Add active class to the clicked button
+        event.currentTarget.classList.add("active");
+      }
+
+      // Load all users
+      async function loadAllUsers() {
+        document.getElementById("loading-users").style.display = "block";
+        document.getElementById("no-users").style.display = "none";
+        try {
+          const response = await fetch(
+            "http://localhost:8080/elearning/users",
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          const data = await response.json(); // cần await ở đây
+
+          if (data.code === 200 || data.code === 201) {
+            allUsers = data.result; // hoặc result.data nếu API gói dữ liệu bên trong
+            displayUsers(); // hàm hiển thị danh sách
+            document.getElementById("loading-users").style.display = "none";
+          } else {
+            alert(
+              "Lỗi: " + (data.message || "Không thể lấy dữ liệu người dùng")
+            );
+          }
+        } catch (error) {
+          console.error("Lỗi khi lấy danh sách người dùng: ", error);
+          alert("Không thể kết nối tới server.");
+        }
+      }
+
+      // Display users with pagination
+      function displayUsers() {
+        const filteredUsers = filterUsersBySearch();
+        console.log(filteredUsers);
+        const tableBody = document.getElementById("users-table-body");
+        tableBody.innerHTML = "";
+
+        if (filteredUsers.length === 0) {
+          document.getElementById("no-users").style.display = "block";
+          document.getElementById("page-numbers").innerHTML = "";
+          return;
+        }
+
+        document.getElementById("no-users").style.display = "none";
+
+        // Calculate pagination
+        const startIndex = (currentPage - 1) * usersPerPage;
+        const endIndex = Math.min(
+          startIndex + usersPerPage,
+          filteredUsers.length
+        );
+        const displayedUsers = filteredUsers.slice(startIndex, endIndex);
+
+        // Create table rows
+        displayedUsers.forEach((user) => {
+          const row = document.createElement("tr");
+
+          // Format date
+          const createdDate = new Date(user.createdAt);
+          const formattedDate = `${createdDate.getDate()}/${
+            createdDate.getMonth() + 1
+          }/${createdDate.getFullYear()}`;
+
+          row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.fullName}</td>
+                    <td>${user.email}</td>
+                    <td><span class="badge role-${
+                      user.roles[0].name
+                    }">${translateRole(user.roles[0].name)}</span></td>
+                    <td>${formattedDate}</td>
+                    <td class="actions">
+                        <button class="action-btn edit-btn" onclick="editUser(${
+                          user.id
+                        })">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteUser(${
+                          user.id
+                        })">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+
+          tableBody.appendChild(row);
+        });
+
+        // Update pagination
+        updatePagination(filteredUsers.length);
+      }
+
+      // Update pagination controls
+      function updatePagination(totalItems) {
+        const totalPages = Math.ceil(totalItems / usersPerPage);
+        const pageNumbers = document.getElementById("page-numbers");
+        pageNumbers.innerHTML = "";
+
+        // Previous button state
+        document.getElementById("prev-page").disabled = currentPage === 1;
+
+        // Next button state
+        document.getElementById("next-page").disabled =
+          currentPage === totalPages;
+
+        // Generate page numbers
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + 4);
+
+        if (endPage - startPage < 4 && startPage > 1) {
+          startPage = Math.max(1, endPage - 4);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+          const pageBtn = document.createElement("button");
+          pageBtn.textContent = i;
+          pageBtn.classList.add("page-number");
+
+          if (i === currentPage) {
+            pageBtn.classList.add("active");
+          }
+
+          pageBtn.addEventListener("click", () => {
+            currentPage = i;
+            displayUsers();
+          });
+
+          pageNumbers.appendChild(pageBtn);
+        }
+      }
+
+      // Navigation functions
+      function previousPage() {
+        if (currentPage > 1) {
+          currentPage--;
+          displayUsers();
+        }
+      }
+
+      function nextPage() {
+        const filteredUsers = filterUsersBySearch();
+        const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+
+        if (currentPage < totalPages) {
+          currentPage++;
+          displayUsers();
+        }
+      }
+
+      // Search and filter functions
+      function searchUsers() {
+        currentPage = 1;
+        displayUsers();
+      }
+
+      function filterUsers() {
+        currentPage = 1;
+        displayUsers();
+      }
+
+      function filterUsersBySearch() {
+        const searchTerm = document
+          .getElementById("user-search")
+          .value.toLowerCase();
+        const roleFilter = document
+          .getElementById("role-filter")
+          .value.toUpperCase();
+        console.log(roleFilter);
+        return allUsers.filter((user) => {
+          const matchesSearch =
+            user.fullName.toLowerCase().includes(searchTerm) ||
+            user.email.toLowerCase().includes(searchTerm);
+
+          const matchesRole =
+            roleFilter === "ALL" || user.roles[0].name === roleFilter;
+          console.log(user.roles[0].name);
+          console.log(roleFilter);
+
+          console.log(matchesRole && matchesSearch);
+          return matchesRole && matchesSearch;
+        });
+      }
+
+      // Load pending users
+      function loadPendingUsers() {
+        document.getElementById("loading-pending").style.display = "block";
+        document.getElementById("no-pending").style.display = "none";
+
+        fetch(`${BASE_URL}/users/pending-accounts`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            pendingUsers = data.result;
+            displayPendingUsers();
+            updatePendingCount();
+            document.getElementById("loading-pending").style.display = "none";
+          })
+          .catch((error) => {
+            console.error("Error loading pending users:", error);
+            document.getElementById("loading-pending").style.display = "none";
+            document.getElementById("no-pending").style.display = "block";
+            document.getElementById("no-pending").textContent =
+              "Lỗi khi tải dữ liệu tài khoản chờ duyệt.";
+          });
+      }
+
+      // Display pending users
+      function displayPendingUsers() {
+        const tableBody = document.getElementById("pending-table-body");
+        tableBody.innerHTML = "";
+
+        if (pendingUsers.length === 0) {
+          document.getElementById("no-pending").style.display = "block";
+          document.getElementById("approve-all-btn").disabled = true;
+
+          console.log("Leng == 0");
+          return;
+        }
+
+        document.getElementById("no-pending").style.display = "none";
+        document.getElementById("approve-all-btn").disabled = false;
+
+        // Create table rows
+        pendingUsers.forEach((user) => {
+          const row = document.createElement("tr");
+          // Format date
+          const registerDate = new Date(user.createdAt);
+          const formattedDate = `${registerDate.getDate()}/${
+            registerDate.getMonth() + 1
+          }/${registerDate.getFullYear()}`;
+
+          row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.fullName}</td>
+                    <td>${user.email}</td>
+                    <td><span class="badge role-${
+                      user.roles[0].name
+                    }">${translateRole(user.roles[0].name)}</span></td>
+                    <td>${formattedDate}</td>
+                    <td class="actions">
+                        <button class="action-btn approve-btn" onclick="approveAccount(${
+                          user.id
+                        })">
+                            <i class="fas fa-check"></i> Phê duyệt
+                        </button>
+                        <button class="action-btn reject-btn" onclick="rejectAccount(${
+                          user.id
+                        })">
+                            <i class="fas fa-times"></i> Từ chối
+                        </button>
+                    </td>
+                `;
+
+          tableBody.appendChild(row);
+        });
+      }
+
+      // Update pending count badge
+      function updatePendingCount() {
+        const pendingCount = document.getElementById("pending-count");
+        pendingCount.textContent = pendingUsers.length;
+
+        if (pendingUsers.length > 0) {
+          pendingCount.style.display = "inline-block";
+        } else {
+          pendingCount.style.display = "none";
+        }
+      }
+
+      // Search pending users
+      function searchPendingUsers() {
+        const searchTerm = document
+          .getElementById("pending-search")
+          .value.toLowerCase();
+        const tableBody = document.getElementById("pending-table-body");
+        tableBody.innerHTML = "";
+        const filteredUsers = pendingUsers.filter(
+          (user) =>
+            user.fullName.toLowerCase().includes(searchTerm) ||
+            user.email.toLowerCase().includes(searchTerm)
+        );
+
+        if (filteredUsers.length === 0) {
+          document.getElementById("no-pending").style.display = "block";
+          return;
+        }
+
+        document.getElementById("no-pending").style.display = "none";
+
+        // Create table rows for filtered users
+        filteredUsers.forEach((user) => {
+          const row = document.createElement("tr");
+
+          // Format date
+          const registerDate = new Date(user.createdAt);
+          const formattedDate = `${registerDate.getDate()}/${
+            registerDate.getMonth() + 1
+          }/${registerDate.getFullYear()}`;
+
+          row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.fullName}</td>
+                    <td>${user.email}</td>
+                    <td><span class="badge role-${
+                      user.roles[0].name
+                    }">${translateRole(user.roles[0].name)}</span></td>
+                    <td>${formattedDate}</td>
+                    <td class="actions">
+                        <button class="action-btn approve-btn" onclick="approveAccount(${
+                          user.id
+                        })">
+                            <i class="fas fa-check"></i> Phê duyệt
+                        </button>
+                        <button class="action-btn reject-btn" onclick="rejectAccount(${
+                          user.id
+                        })">
+                            <i class="fas fa-times"></i> Từ chối
+                        </button>
+                    </td>
+                `;
+
+          tableBody.appendChild(row);
+        });
+      }
+
+      // Approve account
+      function approveAccount(userId) {
+        // Show loading state
+        console.log("approve join");
+        const buttons = document.querySelectorAll(
+          `.action-btn[onclick="approveAccount(${userId})"], .action-btn[onclick="rejectAccount(${userId})"]`
+        );
+        buttons.forEach((button) => {
+          button.disabled = true;
+          if (button.classList.contains("approve-btn")) {
+            button.innerHTML =
+              '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+          }
+        });
+
+        fetch(`${BASE_URL}/users/approve-account/${userId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            // Remove user from pending list
+            pendingUsers = pendingUsers.filter((user) => user.id !== userId);
+            updatePendingCount();
+            displayPendingUsers();
+
+            // Reload all users to include newly approved user
+            loadAllUsers();
+
+            // Show success message
+            alert("Phê duyệt tài khoản thành công!");
+          })
+          .catch((error) => {
+            console.error("Error approving account:", error);
+            alert("Lỗi khi phê duyệt tài khoản. Vui lòng thử lại.");
+
+            // Reset button state
+            buttons.forEach((button) => {
+              button.disabled = false;
+              if (button.classList.contains("approve-btn")) {
+                button.innerHTML = '<i class="fas fa-check"></i> Phê duyệt';
+              }
+            });
+          });
+      }
+
+      // Approve all accounts
+      function approveAllAccounts() {
+        if (pendingUsers.length === 0) {
+          return;
+        }
+
+        // Confirm before approving all
+        if (
+          !confirm("Bạn có chắc chắn muốn phê duyệt tất cả tài khoản đang chờ?")
+        ) {
+          return;
+        }
+
+        // Show loading state
+        const approveAllBtn = document.getElementById("approve-all-btn");
+        approveAllBtn.disabled = true;
+        approveAllBtn.innerHTML =
+          '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+
+        fetch(`${BASE_URL}/users/approve-all-accounts`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            // Clear pending users
+            pendingUsers = [];
+            updatePendingCount();
+            displayPendingUsers();
+
+            // Reload all users to include newly approved users
+            loadAllUsers();
+
+            // Reset button state
+            approveAllBtn.disabled = false;
+            approveAllBtn.innerHTML =
+              '<i class="fas fa-check-double"></i> Phê duyệt tất cả';
+
+            // Show success message
+            alert("Phê duyệt tất cả tài khoản thành công!");
+          })
+          .catch((error) => {
+            console.error("Error approving all accounts:", error);
+            alert("Lỗi khi phê duyệt tất cả tài khoản. Vui lòng thử lại.");
+
+            // Reset button state
+            approveAllBtn.disabled = false;
+            approveAllBtn.innerHTML =
+              '<i class="fas fa-check-double"></i> Phê duyệt tất cả';
+          });
+      } // Reject account
+      function rejectAccount(userId) {
+        // Confirm before rejecting
+        if (!confirm("Bạn có chắc chắn muốn từ chối tài khoản này?")) {
+          return;
+        }
+
+        // Show loading state
+        const buttons = document.querySelectorAll(
+          `.action-btn[onclick="approveAccount(${userId})"], .action-btn[onclick="rejectAccount(${userId})"]`
+        );
+        buttons.forEach((button) => {
+          button.disabled = true;
+          if (button.classList.contains("reject-btn")) {
+            button.innerHTML =
+              '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+          }
+        });
+
+        // In a real application, you would call an API endpoint to reject the account
+        // For this example, we'll just remove it from the pending list
+        pendingUsers = pendingUsers.filter((user) => user.id !== userId);
+        updatePendingCount();
+        displayPendingUsers();
+
+        // Show success message
+        alert("Đã từ chối tài khoản!");
+      }
+
+      // Edit user
+      function editUser(userId) {
+        const user = allUsers.find((u) => u.id === userId);
+        console.log(user);
+      }
+
+      // Delete user
+      function deleteUser(userId) {
+        // Confirm before deleting
+        if (!confirm("Bạn có chắc chắn muốn xóa người dùng này?")) {
+          return;
+        }
+
+        // In a real application, you would call an API endpoint to delete the user
+        // For this example, we'll just remove it from the list
+        allUsers = allUsers.filter((user) => user.id !== userId);
+        displayUsers();
+
+        // Show success message
+        alert("Đã xóa người dùng!");
+      }
+
+      // Modal functions
+      function closeModal() {
+        document.getElementById("user-modal").style.display = "none";
+      }
+
+      // Helper functions
+      function translateRole(role) {
+        switch (role) {
+          case "ADMIN":
+            return "Quản trị viên";
+          case "Teacher":
+            return "Giảng viên";
+          case "Student":
+            return "Học viên";
+          default:
+            return role;
+        }
+      }
+
+      // Close modal when clicking outside
+      window.onclick = function (event) {
+        const modal = document.getElementById("user-modal");
+        if (event.target === modal) {
+          closeModal();
+        }
+      };
+    </script>
+  </body>
+</html>

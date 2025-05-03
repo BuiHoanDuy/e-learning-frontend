@@ -88,6 +88,7 @@
                 
                 if (data.code === 200 && data.result) {
                     // Registration was successful, redirect to login page
+                    if(role === "Teacher") alert("Tài khoản đang chờ admin duyệt");
                     window.location.href = "login.html";
                 } else {
                     // Show the error message if registration failed

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý khóa học - E-Learning Admin</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/css/admin-course.css" />
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h3>E-Learning Admin</h3>
+        <p>Quản trị hệ thống</p>
+      </div>
+      <div class="sidebar-menu">
+        <a href="admin-home.html" class="menu-item">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Tổng quan</span>
+        </a>
+        <a href="admin-users.html" class="menu-item">
+          <i class="fas fa-users"></i>
+          <span>Quản lý người dùng</span>
+        </a>
+        <a href="admin-roles-permissions.html" class="menu-item">
+          <i class="fas fa-lock"></i>
+          <span>Quản lý quyền hạn</span>
+        </a>
+        <a href="admin-courses.html" class="menu-item active">
+          <i class="fas fa-book"></i>
+          <span>Quản lý khóa học</span>
+        </a>
+        <a href="admin-settings.html" class="menu-item">
+          <i class="fas fa-cog"></i>
+          <span>Cài đặt</span>
+        </a>
+        <a href="login.html" class="menu-item">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Đăng xuất</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="header">
+        <h2>Quản lý khóa học</h2>
+        <button id="addCourseBtn" class="btn-primary">
+          <i class="fas fa-plus"></i> Thêm khóa học mới
+        </button>
+      </div>
+
+      <!-- Courses List -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Danh sách khóa học</h3>
+          <div class="search-box">
+            <input
+              type="text"
+              id="searchCourse"
+              placeholder="Tìm kiếm khóa học..."
+            />
+            <button><i class="fas fa-search"></i></button>
+          </div>
+        </div>
+        <div class="card-body">
+          <table id="coursesTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tên khóa học</th>
+                <th>Giảng viên</th>
+                <th>Email GV</th>
+                <th>Số SV</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="coursesList">
+              <!-- Courses will be loaded here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for Student List -->
+    <div id="studentListModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Danh sách sinh viên - <span id="courseNameTitle"></span></h3>
+          <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Họ tên</th>
+                <th>Email</th>
+                <th>Tên đăng nhập</th>
+                <th>Ngày tạo</th>
+                <th>Trạng thái</th>
+              </tr>
+            </thead>
+            <tbody id="studentsList">
+              <!-- Students will be loaded here -->
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary close-modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add/Edit Course Modal -->
+    <div id="courseFormModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modalTitle">Thêm khóa học mới</h3>
+          <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+          <form id="courseForm">
+            <input type="hidden" id="courseId" />
+            <div class="form-group">
+              <label for="courseName">Tên khóa học</label>
+              <input type="text" id="courseName" required />
+            </div>
+            <div class="form-group">
+              <label for="teacherId">Giảng viên</label>
+              <select id="teacherId" required>
+                <!-- Teachers will be loaded here -->
+              </select>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn-primary">Lưu</button>
+              <button type="button" class="btn-secondary close-modal">
+                Hủy
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Configuration
+      const BASE_URL = 'http://localhost:8080/elearning';
+      let token = localStorage.getItem("token");
+
+      // DOM Elements
+      const coursesList = document.getElementById('coursesList');
+      const studentsList = document.getElementById('studentsList');
+      const courseNameTitle = document.getElementById('courseNameTitle');
+      const studentListModal = document.getElementById('studentListModal');
+      const courseFormModal = document.getElementById('courseFormModal');
+      const addCourseBtn = document.getElementById('addCourseBtn');
+      const searchCourse = document.getElementById('searchCourse');
+
+      // Fetch all courses
+      async function fetchCourses() {
+        try {
+          const response = await fetch(`${BASE_URL}/courses`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          const data = await response.json();
+
+          if (data.code === 200) {
+            displayCourses(data.result);
+          } else {
+            alert('Không thể tải danh sách khóa học.');
+          }
+        } catch (error) {
+          console.error('Error fetching courses:', error);
+          alert('Đã có lỗi xảy ra khi tải danh sách khóa học.');
+        }
+      }
+
+      // Display courses in the table
+      function displayCourses(courses) {
+        coursesList.innerHTML = '';
+
+        courses.forEach(course => {
+          const row = document.createElement('tr');
+
+          // Display first 8 characters of ID
+          const shortId = course.id.substring(0, 8) + '...';
+
+          row.innerHTML = `
+            <td title="${course.id}">${shortId}</td>
+            <td>${course.courseName}</td>
+            <td>${course.teacher.fullName}</td>
+            <td>${course.teacher.email}</td>
+            <td><button class="btn-view-students" data-id="${course.id}" data-name="${course.courseName}">
+              <i class="fas fa-users"></i> Xem SV
+            </button></td>
+            <td>
+              <button class="btn-edit" data-id="${course.id}"><i class="fas fa-edit"></i></button>
+              <button class="btn-delete" data-id="${course.id}"><i class="fas fa-trash"></i></button>
+            </td>
+          `;
+
+          coursesList.appendChild(row);
+        });
+
+        // Add event listeners to view students buttons
+        document.querySelectorAll('.btn-view-students').forEach(button => {
+          button.addEventListener('click', () => {
+            const courseId = button.getAttribute('data-id');
+            const courseName = button.getAttribute('data-name');
+            fetchStudentList(courseId, courseName);
+          });
+        });
+
+        // Add event listeners to edit buttons
+        document.querySelectorAll('.btn-edit').forEach(button => {
+          button.addEventListener('click', () => {
+            const courseId = button.getAttribute('data-id');
+            // Implement edit functionality
+            // alert('Chức năng chỉnh sửa khóa học ' + courseId);
+          });
+        });
+
+        // Add event listeners to delete buttons
+        document.querySelectorAll('.btn-delete').forEach(button => {
+          button.addEventListener('click', () => {
+            const courseId = button.getAttribute('data-id');
+            if (confirm('Bạn có chắc chắn muốn xóa khóa học này?')) {
+              // Implement delete functionality
+              alert('Đã xóa khóa học ' + courseId);
+            }
+          });
+        });
+      }
+
+      // Fetch student list for a specific course
+      async function fetchStudentList(courseId, courseName) {
+        try {
+          const response = await fetch(`${BASE_URL}/courses/student-list/${courseId}`,{
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+          const students = await response.json();
+
+          displayStudents(students, courseName);
+
+          // Show modal
+          studentListModal.style.display = 'block';
+        } catch (error) {
+          console.error('Error fetching students:', error);
+          alert('Đã có lỗi xảy ra khi tải danh sách sinh viên.');
+        }
+      }
+
+      // Display students in the modal
+      function displayStudents(students, courseName) {
+        studentsList.innerHTML = '';
+        courseNameTitle.textContent = courseName;
+
+        students.forEach(student => {
+          const row = document.createElement('tr');
+
+          // Format date
+          const createdDate = new Date(student.createdAt).toLocaleDateString('vi-VN');
+
+          // Display first 8 characters of ID
+          const shortId = student.id.substring(0, 8) + '...';
+
+          row.innerHTML = `
+            <td title="${student.id}">${shortId}</td>
+            <td>${student.fullName}</td>
+            <td>${student.email}</td>
+            <td>${student.username}</td>
+            <td>${createdDate}</td>
+            <td>${student.active ? '<span class="status-active">Hoạt động</span>' : '<span class="status-inactive">Không hoạt động</span>'}</td>
+          `;
+
+          studentsList.appendChild(row);
+        });
+      }
+
+      // Search course functionality
+      searchCourse.addEventListener('input', () => {
+        const searchValue = searchCourse.value.toLowerCase();
+        const rows = coursesList.querySelectorAll('tr');
+
+        rows.forEach(row => {
+          const courseName = row.cells[1].textContent.toLowerCase();
+          const teacherName = row.cells[2].textContent.toLowerCase();
+
+          if (courseName.includes(searchValue) || teacherName.includes(searchValue)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+
+      // Close modal when clicking on close button or outside the modal
+      document.querySelectorAll('.close-modal').forEach(element => {
+        element.addEventListener('click', () => {
+          studentListModal.style.display = 'none';
+          courseFormModal.style.display = 'none';
+        });
+      });
+
+      window.addEventListener('click', (event) => {
+        if (event.target === studentListModal) {
+          studentListModal.style.display = 'none';
+        }
+        if (event.target === courseFormModal) {
+          courseFormModal.style.display = 'none';
+        }
+      });
+
+      // Add course button click handler
+      addCourseBtn.addEventListener('click', () => {
+        document.getElementById('modalTitle').textContent = 'Thêm khóa học mới';
+        document.getElementById('courseId').value = '';
+        document.getElementById('courseName').value = '';
+        // Here you would populate teachers dropdown
+        courseFormModal.style.display = 'block';
+      });
+
+      // Initialize
+      document.addEventListener('DOMContentLoaded', () => {
+        fetchCourses();
+      });
+    </script>
+  </body>
+</html>

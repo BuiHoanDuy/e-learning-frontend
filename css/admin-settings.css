@@ -1,0 +1,255 @@
+/* ============= SETTINGS SPECIFIC STYLES ============= */
+
+/* Settings Tabs */
+.settings-tabs {
+    display: flex;
+    overflow-x: auto;
+    margin-bottom: 25px;
+    background: var(--lighter);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  
+  .tab-btn {
+    padding: 15px 22px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .tab-btn i {
+    margin-right: 10px;
+    font-size: 1.1rem;
+  }
+  
+  .tab-btn:hover {
+    color: var(--primary);
+    background-color: rgba(52, 152, 219, 0.05);
+  }
+  
+  .tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    background-color: rgba(52, 152, 219, 0.1);
+  }
+  
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 3px 3px 0 0;
+  }
+  
+  .tab-content {
+    display: none;
+    animation: fadeIn 0.5s ease;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Preview Images */
+  .preview-image {
+    margin-top: 10px;
+    background: #f5f5f5;
+    border: 1px dashed #ddd;
+    border-radius: var(--radius);
+    padding: 15px;
+    text-align: center;
+    max-width: 300px;
+  }
+  
+  .preview-image img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .preview-image.small {
+    max-width: 100px;
+  }
+  
+  /* Backup & Restore Section */
+  .backup-options {
+    background: #f9f9f9;
+    border-radius: var(--radius);
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid var(--border);
+  }
+  
+  #selectedBackupFile {
+    margin: 10px 0 15px;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: var(--radius);
+    font-style: italic;
+    color: var(--text-muted);
+  }
+  
+  /* Enhanced form elements */
+  input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    background: rgb(175, 170, 170);
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  input[type="checkbox"]:checked {
+    background: rgb(149, 144, 144);
+    border-color: var(--primary);
+  }
+  
+  input[type="checkbox"]:checked::before {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgb(169, 25, 25);
+    font-size: 14px;
+  }
+  
+  input[type="color"] {
+    border-radius: var(--radius);
+    height: 40px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    padding: 2px;
+  }
+  
+  /* Custom Select Styling */
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 15px;
+    padding-right: 40px !important;
+  }
+  
+  /* File Upload Button Enhancement */
+  .file-upload {
+    margin-bottom: 15px;
+  }
+  
+  .file-upload label.btn-secondary {
+    border: 1px dashed var(--border);
+    background: #f9f9f9;
+    padding: 12px 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+  }
+  
+  .file-upload:hover label.btn-secondary {
+    background: #f0f0f0;
+    border-color: #ccc;
+  }
+  
+  /* Responsive Settings for Tabs */
+  @media (max-width: 768px) {
+    .settings-tabs {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .tab-btn {
+      flex: 1 1 auto;
+      text-align: center;
+      padding: 12px 15px;
+      justify-content: center;
+    }
+    
+    .tab-btn i {
+      margin-right: 8px;
+      font-size: 1rem;
+    }
+    
+    .preview-image {
+      max-width: 100%;
+    }
+  }
+  
+  /* Dark Mode Support */
+  @media (prefers-color-scheme: dark) {
+    body.dark-theme {
+      --primary: #3498db;
+      --primary-dark: #2980b9;
+      --primary-light: #1c3d5d;
+      --dark: #ecf0f1;
+      --darker: #1e272e;
+      --light: #2c3e50;
+      --lighter: #34495e;
+      --border: #4b6584;
+      --text: #ecf0f1;
+      --text-muted: #bdc3c7;
+    }
+    
+    body.dark-theme .sidebar {
+      background: #1a1a2e;
+    }
+    
+    body.dark-theme .sidebar-header {
+      background: #16213e;
+    }
+    
+    body.dark-theme .card, 
+    body.dark-theme .settings-tabs {
+      background: #16213e;
+      border-color: #2c3e50;
+    }
+    
+    body.dark-theme .backup-options,
+    body.dark-theme #selectedBackupFile,
+    body.dark-theme .preview-image {
+      background: #1c2a3a;
+      border-color: #2c3e50;
+    }
+    
+    body.dark-theme .btn-secondary {
+      background: #2c3e50;
+      color: #ecf0f1;
+      border-color: #4b6584;
+    }
+    
+    body.dark-theme input,
+    body.dark-theme select,
+    body.dark-theme textarea {
+      background: #2c3e50;
+      border-color: #4b6584;
+      color: #ecf0f1;
+    }
+    
+    body.dark-theme .file-upload label.btn-secondary {
+      background: #2c3e50;
+      border-color: #4b6584;
+    }
+  }

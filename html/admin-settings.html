@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cài đặt hệ thống - E-Learning Admin</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/css/admin-style.css" />
+    <link rel="stylesheet" href="/css/admin-settings.css" />
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h3>E-Learning Admin</h3>
+        <p>Quản trị hệ thống</p>
+      </div>
+      <div class="sidebar-menu">
+        <a href="admin-home.html" class="menu-item">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Tổng quan</span>
+        </a>
+        <a href="admin-users.html" class="menu-item">
+          <i class="fas fa-users"></i>
+          <span>Quản lý người dùng</span>
+        </a>
+        <a href="admin-roles-permissions.html" class="menu-item">
+          <i class="fas fa-lock"></i>
+          <span>Quản lý quyền hạn</span>
+        </a>
+        <a href="admin-courses.html" class="menu-item">
+          <i class="fas fa-book"></i>
+          <span>Quản lý khóa học</span>
+        </a>
+        <a href="admin-settings.html" class="menu-item active">
+          <i class="fas fa-cog"></i>
+          <span>Cài đặt</span>
+        </a>
+        <a href="login.html" class="menu-item">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Đăng xuất</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="header">
+        <h2>Cài đặt hệ thống</h2>
+      </div>
+
+      <!-- Settings Tabs -->
+      <div class="settings-tabs">
+        <button class="tab-btn active" data-tab="general">
+          <i class="fas fa-sliders-h"></i> Cài đặt chung
+        </button>
+        <button class="tab-btn" data-tab="appearance">
+          <i class="fas fa-palette"></i> Giao diện
+        </button>
+        <button class="tab-btn" data-tab="notifications">
+          <i class="fas fa-bell"></i> Thông báo
+        </button>
+        <button class="tab-btn" data-tab="security">
+          <i class="fas fa-shield-alt"></i> Bảo mật
+        </button>
+        <button class="tab-btn" data-tab="backup">
+          <i class="fas fa-database"></i> Sao lưu & Phục hồi
+        </button>
+      </div>
+
+      <!-- General Settings -->
+      <div id="general" class="tab-content active">
+        <div class="card">
+          <div class="card-header">
+            <h3>Cài đặt chung</h3>
+          </div>
+          <div class="card-body">
+            <form id="generalSettingsForm">
+              <div class="form-group">
+                <label for="siteName">Tên trang</label>
+                <input type="text" id="siteName" value="E-Learning System" />
+              </div>
+              <div class="form-group">
+                <label for="siteDescription">Mô tả trang</label>
+                <textarea id="siteDescription" rows="3">Hệ thống học trực tuyến hiện đại và tiện lợi</textarea>
+              </div>
+              <div class="form-group">
+                <label for="adminEmail">Email quản trị viên</label>
+                <input type="email" id="adminEmail" value="admin@elearning.com" />
+              </div>
+              <div class="form-group">
+                <label for="language">Ngôn ngữ mặc định</label>
+                <select id="language">
+                  <option value="vi" selected>Tiếng Việt</option>
+                  <option value="en">English</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="timezone">Múi giờ</label>
+                <select id="timezone">
+                  <option value="Asia/Ho_Chi_Minh" selected>Asia/Ho_Chi_Minh (GMT+7)</option>
+                  <option value="Asia/Bangkok">Asia/Bangkok (GMT+7)</option>
+                  <option value="Asia/Singapore">Asia/Singapore (GMT+8)</option>
+                  <option value="Asia/Tokyo">Asia/Tokyo (GMT+9)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="dateFormat">Định dạng ngày tháng</label>
+                <select id="dateFormat">
+                  <option value="DD/MM/YYYY" selected>DD/MM/YYYY</option>
+                  <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                  <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn-primary">Lưu thay đổi</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Appearance Settings -->
+      <div id="appearance" class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            <h3>Cài đặt giao diện</h3>
+          </div>
+          <div class="card-body">
+            <form id="appearanceSettingsForm">
+              <div class="form-group">
+                <label for="theme">Giao diện</label>
+                <select id="theme">
+                  <option value="light" selected>Sáng</option>
+                  <option value="dark">Tối</option>
+                  <option value="auto">Tự động (theo hệ thống)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="primaryColor">Màu chính</label>
+                <input type="color" id="primaryColor" value="#3498db" />
+              </div>
+              <div class="form-group">
+                <label for="secondaryColor">Màu phụ</label>
+                <input type="color" id="secondaryColor" value="#2ecc71" />
+              </div>
+              <div class="form-group">
+                <label for="logo">Logo</label>
+                <div class="file-upload">
+                  <input type="file" id="logo" accept="image/*" />
+                  <label for="logo" class="btn-secondary">
+                    <i class="fas fa-upload"></i> Tải lên logo mới
+                  </label>
+                </div>
+                <div class="preview-image">
+                  <img src="/img/logo.png" alt="Logo hiện tại" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="favicon">Favicon</label>
+                <div class="file-upload">
+                  <input type="file" id="favicon" accept="image/x-icon,image/png" />
+                  <label for="favicon" class="btn-secondary">
+                    <i class="fas fa-upload"></i> Tải lên favicon mới
+                  </label>
+                </div>
+                <div class="preview-image small">
+                  <img src="/img/favicon.ico" alt="Favicon hiện tại" />
+                </div>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn-primary">Lưu thay đổi</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications Settings -->
+      <div id="notifications" class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            <h3>Cài đặt thông báo</h3>
+          </div>
+          <div class="card-body">
+            <form id="notificationSettingsForm">
+              <h4>Email thông báo</h4>
+              <div class="form-group checkbox-group">
+                <input type="checkbox" id="notifyNewUser" checked />
+                <label for="notifyNewUser">Người dùng mới đăng ký</label>
+              </div>
+              <div class="form-group checkbox-group">
+                <input type="checkbox" id="notifyNewCourse" checked />
+                <label for="notifyNewCourse">Khóa học mới được tạo</label>
+              </div>
+              <div class="form-group checkbox-group">
+                <input type="checkbox" id="notifyUserReports" checked />
+                <label for="notifyUserReports">Báo cáo từ người dùng</label>
+              </div>
+              <div class="form-group checkbox-group">
+                <input type="checkbox" id="notifySystemErrors" checked />
+                <label for="notifySystemErrors">Lỗi hệ thống</label>
+              </div>
+              
+              <h4>Thông báo hệ thống</h4>
+              <div class="form-group checkbox-group">
+                <input type="checkbox" id="showMaintenanceNotice" />
+                <label for="showMaintenanceNotice">Hiển thị thông báo bảo trì</label>
+              </div>
+              <div class="form-group">
+                <label for="maintenanceMessage">Nội dung thông báo bảo trì</label>
+                <textarea id="maintenanceMessage" rows="3">Hệ thống đang được bảo trì. Vui lòng quay lại sau.</textarea>
+              </div>
+              <div class="form-group">
+                <label for="maintenanceStartDate">Thời gian bắt đầu bảo trì</label>
+                <input type="datetime-local" id="maintenanceStartDate" />
+              </div>
+              <div class="form-group">
+                <label for="maintenanceEndDate">Thời gian kết thúc bảo trì</label>
+                <input type="datetime-local" id="maintenanceEndDate" />
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn-primary">Lưu thay đổi</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Settings -->
+      <div id="security" class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            <h3>Cài đặt bảo mật</h3>
+          </div>
+          <div class="card-body">
+            <form id="securitySettingsForm">
+              <div class="form-group">
+                <label for="passwordPolicy">Chính sách mật khẩu</label>
+                <select id="passwordPolicy">
+                  <option value="low">Thấp (tối thiểu 6 ký tự)</option>
+                  <option value="medium" selected>Trung bình (tối thiểu 8 ký tự, bao gồm chữ và số)</option>
+                  <option value="high">Cao (tối thiểu 10 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="sessionTimeout">Thời gian hết phiên (phút)</label>
+                <input type="number" id="sessionTimeout" min="5" max="1440" value="60" />
+              </div>
+              <div class="form-group checkbox-group">
+                <input type="checkbox" id="enableTwoFactor" />
+                <label for="enableTwoFactor">Bật xác thực hai yếu tố</label>
+              </div>
+              <div class="form-group checkbox-group">
+                <input type="checkbox" id="enableCaptcha" checked />
+                <label for="enableCaptcha">Bật CAPTCHA khi đăng nhập</label>
+              </div>
+              <div class="form-group checkbox-group">
+                <input type="checkbox" id="limitLoginAttempts" checked />
+                <label for="limitLoginAttempts">Giới hạn số lần đăng nhập thất bại</label>
+              </div>
+              <div class="form-group">
+                <label for="maxLoginAttempts">Số lần đăng nhập thất bại tối đa</label>
+                <input type="number" id="maxLoginAttempts" min="3" max="10" value="5" />
+              </div>
+              <div class="form-group">
+                <label for="lockoutDuration">Thời gian khóa tài khoản (phút)</label>
+                <input type="number" id="lockoutDuration" min="5" max="1440" value="30" />
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn-primary">Lưu thay đổi</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Backup & Restore Settings -->
+      <div id="backup" class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            <h3>Sao lưu & Phục hồi</h3>
+          </div>
+          <div class="card-body">
+            <form id="backupSettingsForm">
+              <div class="form-group">
+                <h4>Sao lưu dữ liệu</h4>
+                <p>Tạo bản sao lưu dữ liệu hệ thống. Bạn có thể tải về bản sao lưu để lưu trữ.</p>
+                <div class="backup-options">
+                  <div class="form-group checkbox-group">
+                    <input type="checkbox" id="backupUsers" checked />
+                    <label for="backupUsers">Dữ liệu người dùng</label>
+                  </div>
+                  <div class="form-group checkbox-group">
+                    <input type="checkbox" id="backupCourses" checked />
+                    <label for="backupCourses">Dữ liệu khóa học</label>
+                  </div>
+                  <div class="form-group checkbox-group">
+                    <input type="checkbox" id="backupConfigs" checked />
+                    <label for="backupConfigs">Cấu hình hệ thống</label>
+                  </div>
+                  <div class="form-group checkbox-group">
+                    <input type="checkbox" id="backupMedia" />
+                    <label for="backupMedia">Dữ liệu media (hình ảnh, video)</label>
+                  </div>
+                </div>
+                <button type="button" id="createBackupBtn" class="btn-primary">
+                  <i class="fas fa-download"></i> Tạo bản sao lưu
+                </button>
+              </div>
+
+              <hr />
+
+              <div class="form-group">
+                <h4>Tự động sao lưu</h4>
+                <div class="form-group checkbox-group">
+                  <input type="checkbox" id="enableAutoBackup" checked />
+                  <label for="enableAutoBackup">Bật tự động sao lưu</label>
+                </div>
+                <div class="form-group">
+                  <label for="backupFrequency">Tần suất sao lưu</label>
+                  <select id="backupFrequency">
+                    <option value="daily">Hàng ngày</option>
+                    <option value="weekly" selected>Hàng tuần</option>
+                    <option value="monthly">Hàng tháng</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="backupTime">Thời gian sao lưu</label>
+                  <input type="time" id="backupTime" value="01:00" />
+                </div>
+                <div class="form-group">
+                  <label for="backupRetention">Giữ bản sao lưu trong (ngày)</label>
+                  <input type="number" id="backupRetention" min="1" max="365" value="30" />
+                </div>
+              </div>
+
+              <hr />
+
+              <div class="form-group">
+                <h4>Phục hồi dữ liệu</h4>
+                <p>Chọn file sao lưu để phục hồi hệ thống. <strong>Cảnh báo: Dữ liệu hiện tại sẽ bị ghi đè.</strong></p>
+                <div class="file-upload">
+                  <input type="file" id="restoreFile" accept=".zip,.sql,.gz" />
+                  <label for="restoreFile" class="btn-secondary">
+                    <i class="fas fa-upload"></i> Chọn file sao lưu
+                  </label>
+                </div>
+                <div id="selectedBackupFile">Chưa chọn file nào</div>
+                <button type="button" id="restoreBackupBtn" class="btn-warning" disabled>
+                  <i class="fas fa-undo"></i> Phục hồi dữ liệu
+                </button>
+              </div>
+
+              <div class="form-group">
+                <button type="submit" class="btn-primary">Lưu thay đổi</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Tab navigation
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tabId = btn.getAttribute('data-tab');
+          
+          // Remove active class from all buttons and contents
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(c => c.classList.remove('active'));
+          
+          // Add active class to current button and content
+          btn.classList.add('active');
+          document.getElementById(tabId).classList.add('active');
+        });
+      });
+
+      // Form submissions
+      const forms = document.querySelectorAll('form');
+      forms.forEach(form => {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          // In a real application, you would send the form data to the server here
+          alert('Cài đặt đã được lưu thành công!');
+        });
+      });
+
+      // Backup functionality
+      document.getElementById('createBackupBtn').addEventListener('click', () => {
+        // Simulate backup creation
+        alert('Đang tạo bản sao lưu, vui lòng đợi...');
+        setTimeout(() => {
+          alert('Đã tạo bản sao lưu thành công! Tải xuống bắt đầu trong giây lát.');
+        }, 2000);
+      });
+
+      // File selection for restore
+      document.getElementById('restoreFile').addEventListener('change', (e) => {
+        const fileName = e.target.files[0]?.name || 'Chưa chọn file nào';
+        document.getElementById('selectedBackupFile').textContent = fileName;
+        document.getElementById('restoreBackupBtn').disabled = !e.target.files[0];
+      });
+
+      // Restore functionality
+      document.getElementById('restoreBackupBtn').addEventListener('click', () => {
+        if (confirm('Bạn có chắc chắn muốn phục hồi dữ liệu? Dữ liệu hiện tại sẽ bị ghi đè.')) {
+          alert('Đang phục hồi dữ liệu, vui lòng đợi...');
+          setTimeout(() => {
+            alert('Đã phục hồi dữ liệu thành công! Hệ thống sẽ khởi động lại.');
+          }, 2000);
+        }
+      });
+    </script>
+  </body>
+</html>
