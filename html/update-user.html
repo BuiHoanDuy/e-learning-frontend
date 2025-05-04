@@ -3,32 +3,215 @@
   <head>
     <meta charset="UTF-8" />
     <title>Chỉnh sửa thông tin cá nhân</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
-      /* Để footer luôn sát đáy */
-      html, body {
-        height: 100%;
+      :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --accent-color: #f72585;
+        --light-bg: #f8f9fa;
+        --dark-bg: #212529;
+        --success-color: #4CC9F0;
       }
+      
       body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: #f5f7fa;
+        height: 100%;
         display: flex;
         flex-direction: column;
+        min-height: 100vh;
       }
+      
       main {
         flex: 1;
       }
+      
+      .navbar {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+      }
+      
+      .navbar-brand {
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+      
+      .sidebar {
+        min-height: 100vh;
+        border-right: 1px solid #dee2e6;
+        background-color: white;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+        padding-top: 1.5rem;
+      }
+      
+      .sidebar h4 {
+        color: var(--primary-color);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+      }
+      
+      .sidebar h4 i {
+        margin-right: 0.5rem;
+      }
+      
+      .sidebar .nav-link {
+        color: #495057;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.25rem;
+        margin: 0.25rem 0.75rem;
+        transition: all 0.3s ease;
+      }
+      
+      .sidebar .nav-link:hover {
+        background-color: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+        transform: translateX(5px);
+      }
+      
+      .sidebar .nav-link.active {
+        background-color: var(--primary-color);
+        color: white;
+      }
+      
+      .footer-link:hover {
+        text-decoration: underline;
+        color: var(--accent-color) !important;
+      }
+      
       footer {
+        background: linear-gradient(135deg, var(--dark-bg), #343a40) !important;
         margin-top: auto;
+      }
+      
+      /* Course list customization */
+      #course-list {
+        margin-top: 0.5rem;
+      }
+      
+      #course-list .nav-link {
+        position: relative;
+        padding-left: 2.25rem;
+        overflow: hidden;
+      }
+      
+      #course-list .nav-link::before {
+        content: "•";
+        position: absolute;
+        left: 1.25rem;
+        color: var(--accent-color);
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+      }
+      
+      #course-list .nav-link:hover::before {
+        left: 1.5rem;
+        color: var(--primary-color);
+      }
+      
+      /* Thêm style mới cho form */
+      .profile-form-container {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        padding: 2rem;
+        margin-bottom: 2rem;
+      }
+      
+      .profile-form-container h2 {
+        color: var(--primary-color);
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        position: relative;
+        padding-bottom: 0.75rem;
+      }
+      
+      .profile-form-container h2::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: var(--accent-color);
+        border-radius: 2px;
+      }
+      
+      .form-label {
+        font-weight: 500;
+        color: #495057;
+      }
+      
+      .form-control {
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        border: 1px solid #ced4da;
+        transition: all 0.3s;
+      }
+      
+      .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+      }
+      
+      .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        border-radius: 8px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s;
+      }
+      
+      .btn-primary:hover {
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+      }
+      
+      .form-floating {
+        margin-bottom: 1.5rem;
+      }
+      
+      .input-group-text {
+        background-color: var(--light-bg);
+        border-radius: 8px 0 0 8px;
+        border-right: none;
+      }
+      
+      .password-toggle {
+        cursor: pointer;
+        color: #6c757d;
+      }
+      
+      .input-icon {
+        color: var(--primary-color);
+        width: 18px;
+      }
+      
+      @media (max-width: 992px) {
+        .sidebar {
+          min-height: auto;
+        }
+        
+        .profile-form-container {
+          margin-top: 1rem;
+        }
       }
     </style>
   </head>
   <body>
     <!-- Navbar -->
-    <nav id="header" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav id="header" class="navbar navbar-expand-lg navbar-dark">
       <div class="container">
-        <a class="navbar-brand" id="logo-link" href="#">E-Learning</a>
+        <a class="navbar-brand" id="logo-link" href="#">
+          <i class="fas fa-graduation-cap me-2"></i>E-Learning
+        </a>
         <button
           class="navbar-toggler"
           type="button"
@@ -40,10 +223,14 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" id="home-link" href="#">Home</a>
+              <a class="nav-link" id="home-link" href="#">
+                <i class="fas fa-home me-1"></i>Trang chủ
+              </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="login.html">Logout</a>
+              <a class="nav-link" href="login.html">
+                <i class="fas fa-sign-out-alt me-1"></i>Đăng xuất
+              </a>
             </li>
           </ul>
         </div>
@@ -55,77 +242,137 @@
         <!-- Sidebar -->
         <nav class="col-md-3 col-lg-2 bg-light sidebar">
           <div class="position-sticky">
-            <h4 class="p-3">Khóa học của tôi</h4>
+            <h4 class="p-3"><i class="fas fa-book me-2"></i>Khóa học của tôi</h4>
             <ul class="nav flex-column" id="course-list">
               <!-- Sidebar course list will be injected here -->
+              <li class="nav-item"><span class="nav-link text-muted"><i class="fas fa-spinner fa-spin me-2"></i>Đang tải khóa học...</span></li>
             </ul>
           </div>
         </nav>
 
         <!-- Main content -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-          <div class="container mt-5">
-            <h2 class="mb-4">Chỉnh sửa thông tin cá nhân</h2>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+          <div class="container">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" id="breadcrumb-home">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Chỉnh sửa thông tin cá nhân</li>
+              </ol>
+            </nav>
+            
+            <div class="profile-form-container">
+              <h2 class="mb-4">Chỉnh sửa thông tin cá nhân</h2>
 
-            <form id="editProfileForm">
-              <div class="mb-3">
-                <label for="fullName" class="form-label">Họ và tên</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="fullName"
-                  placeholder="Nhập họ tên"
-                  required
-                />
-              </div>
+              <form id="editProfileForm">
+                <div class="mb-4">
+                  <label for="fullName" class="form-label">
+                    <i class="fas fa-user me-2 input-icon"></i>Họ và tên
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="fullName"
+                    placeholder="Nhập họ tên"
+                    required
+                  />
+                </div>
 
-              <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input
-                  type="email"
-                  class="form-control"
-                  id="email"
-                  placeholder="Nhập email"
-                  required
-                />
-              </div>
+                <div class="mb-4">
+                  <label for="email" class="form-label">
+                    <i class="fas fa-envelope me-2 input-icon"></i>Email
+                  </label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    placeholder="Nhập email"
+                    required
+                  />
+                </div>
 
-              <div class="mb-3">
-                <label for="password" class="form-label">Mật khẩu mới</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="password"
-                  placeholder="Nhập mật khẩu mới"
-                  required
-                />
-              </div>
+                <div class="mb-4">
+                  <label for="old-password" class="form-label">
+                    <i class="fas fa-lock me-2 input-icon"></i>Mật khẩu hiện tại
+                  </label>
+                  <div class="input-group">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="old-password"
+                      placeholder="Nhập mật hiện tại"
+                      required
+                    />
+                    <span class="input-group-text">
+                      <i class="fas fa-eye-slash password-toggle" id="toggleOldPassword"></i>
+                    </span>
+                  </div>
+                </div>
 
-              <button type="submit" class="btn btn-primary">Cập nhật</button>
-            </form>
+                <div class="mb-4">
+                  <label for="password" class="form-label">
+                    <i class="fas fa-lock me-2 input-icon"></i>Mật khẩu mới
+                  </label>
+                  <div class="input-group">
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="password"
+                      placeholder="Nhập mật khẩu mới"
+                    />
+                    <span class="input-group-text">
+                      <i class="fas fa-eye-slash password-toggle" id="togglePassword"></i>
+                    </span>
+                  </div>
+                  <small class="form-text text-muted">Để trống nếu không muốn thay đổi mật khẩu</small>
+                </div>
 
-            <div id="resultMessage" class="mt-3"></div>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                  <button type="button" class="btn btn-outline-secondary me-md-2">
+                    <i class="fas fa-times me-2"></i>Hủy
+                  </button>
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-2"></i>Cập nhật thông tin
+                  </button>
+                </div>
+              </form>
+
+              <div id="resultMessage" class="mt-3"></div>
+            </div>
           </div>
         </main>
       </div>
     </div>
 
     <!-- Footer -->
-    <footer id="footer" class="text-light bg-dark py-3">
+    <footer id="footer" class="text-light py-3">
       <div class="container text-center">
-        <p>
-          <a href="#" class="text-light footer-link">✉ Contact site support</a>
-        </p>
-        <p>
-          Bạn đang đăng nhập với tên
-          <a href="login.html" class="text-light" id="username-display"
-            >Đang tải...</a
-          >
-        </p>
-        <p><a id="footer-home-link" href="#" class="text-light footer-link">Trang chủ</a></p>
+        <div class="row">
+          <div class="col-md-4 mb-3 mb-md-0 text-md-start">
+            <h5 class="mb-2">E-Learning</h5>
+            <p class="small mb-0">Nền tảng học trực tuyến hàng đầu</p>
+          </div>
+          <div class="col-md-4 mb-3 mb-md-0">
+            <p>
+              <a href="#" class="text-light footer-link">
+                <i class="fas fa-envelope me-1"></i> Liên hệ hỗ trợ
+              </a>
+            </p>
+            <p>
+              Bạn đang đăng nhập với tên
+              <a href="login.html" class="text-light" id="username-display">
+                <i class="fas fa-spinner fa-spin me-1"></i>Đang tải...
+              </a>
+            </p>
+          </div>
+          <div class="col-md-4 text-md-end">
+            <p><a id="footer-home-link" href="#" class="text-light footer-link"><i class="fas fa-home me-1"></i>Trang chủ</a></p>
+            <p class="small mb-0">© 2025 E-Learning. All rights reserved.</p>
+          </div>
+        </div>
       </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       const base_url = "http://localhost:8080/elearning";
       const token = localStorage.getItem("token");
@@ -137,21 +384,24 @@
         const logoLink = document.getElementById("logo-link");
         const homeLink = document.getElementById("home-link");
         const footerHomeLink = document.getElementById("footer-home-link");
+        const breadcrumbHome = document.getElementById("breadcrumb-home");
 
         if (role === "TEACHER") {
           logoLink.href = "teacher-home.html";
           homeLink.href = "teacher-home.html";
           footerHomeLink.href = "teacher-home.html";
+          breadcrumbHome.href = "teacher-home.html";
 
           document.getElementById("header").classList.add("bg-primary");
-        document.getElementById("header").classList.remove("bg-dark");
+          document.getElementById("header").classList.remove("bg-dark");
 
-        document.getElementById("footer").classList.add("bg-primary");
-        document.getElementById("footer").classList.remove("bg-dark");
+          document.getElementById("footer").classList.add("bg-primary");
+          document.getElementById("footer").classList.remove("bg-dark");
         } else {
           logoLink.href = "home.html";
           homeLink.href = "home.html";
           footerHomeLink.href = "home.html";
+          breadcrumbHome.href = "home.html";
         }
 
         loadCourses();
@@ -159,9 +409,40 @@
         const displayElement = document.getElementById("username-display");
         document.getElementById("fullName").value = fullname;
         document.getElementById("email").value = localStorage.getItem("email");
-        displayElement.textContent = fullname
-          ? `${fullname} (Thoát)`
-          : "Khách (Thoát)";
+        displayElement.innerHTML = fullname
+          ? `<i class="fas fa-user me-1"></i>${fullname} <i class="fas fa-sign-out-alt ms-1"></i>`
+          : "<i class='fas fa-user me-1'></i>Khách <i class='fas fa-sign-out-alt ms-1'></i>";
+
+        // Toggle password visibility
+        document.getElementById("togglePassword").addEventListener("click", function() {
+          const passwordInput = document.getElementById("password");
+          const icon = this;
+          
+          if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+          } else {
+            passwordInput.type = "password";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+          }
+        });
+         // Toggle password visibility
+         document.getElementById("toggleOldPassword").addEventListener("click", function() {
+          const passwordInput = document.getElementById("old-password");
+          const icon = this;
+          
+          if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+          } else {
+            passwordInput.type = "password";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+          }
+        });
       });
 
       // Load danh sách khóa học sidebar
@@ -177,26 +458,32 @@
 
           if (data.code === 200 && Array.isArray(data.result)) {
             courseList.innerHTML = "";
-            data.result.forEach((course) => {
-              const li = document.createElement("li");
-              li.className = "nav-item";
+            if (data.result.length > 0) {
+              data.result.forEach((course) => {
+                const li = document.createElement("li");
+                li.className = "nav-item";
 
-              const a = document.createElement("a");
-              a.className = "nav-link";
-              a.href = `course-detail.html?id=${course.id}`;
-              a.textContent = course.courseName;
+                const a = document.createElement("a");
+                a.className = "nav-link";
+                if(role === "TEACHER") a.href = `teacher-course-detail.html?id=${course.id}`;
+                else a.href = `course-detail.html?id=${course.id}`;
+                a.innerHTML = `<i class="fas fa-book me-2"></i>${course.courseName}`;
 
-              li.appendChild(a);
-              courseList.appendChild(li);
-            });
+                li.appendChild(a);
+                courseList.appendChild(li);
+              });
+            } else {
+              courseList.innerHTML =
+                "<li class='nav-item'><span class='nav-link text-muted'><i class='fas fa-info-circle me-2'></i>Bạn chưa có khóa học nào.</span></li>";
+            }
           } else {
             courseList.innerHTML =
-              "<li class='nav-item text-danger p-2'>Không có khóa học nào.</li>";
+              "<li class='nav-item'><span class='nav-link text-danger'><i class='fas fa-exclamation-circle me-2'></i>Không có khóa học nào.</span></li>";
           }
         } catch (error) {
           console.error("Lỗi khi tải khóa học:", error);
           courseList.innerHTML =
-            "<li class='nav-item text-danger p-2'>Không thể tải danh sách khóa học.</li>";
+            "<li class='nav-item'><span class='nav-link text-danger'><i class='fas fa-exclamation-triangle me-2'></i>Không thể tải danh sách khóa học.</span></li>";
         }
       }
 
@@ -209,12 +496,20 @@
           const fullName = document.getElementById("fullName").value;
           const email = document.getElementById("email").value;
           const password = document.getElementById("password").value;
+          const oldPassword = document.getElementById("old-password").value;
 
           const userData = {
             fullName: fullName,
             email: email,
+            oldPassword: oldPassword,
             password: password,
           };
+
+          // Hiển thị loading
+          document.getElementById("resultMessage").innerHTML = 
+            `<div class="alert alert-info">
+              <i class="fas fa-spinner fa-spin me-2"></i>Đang cập nhật thông tin...
+            </div>`;
 
           fetch(`${base_url}/users/${userId}`, {
             method: "PUT",
@@ -227,22 +522,37 @@
             .then((response) => response.json())
             .then((data) => {
               if (data.code === 200) {
-                document.getElementById(
-                  "resultMessage"
-                ).innerHTML = `<div class="alert alert-success">Cập nhật thành công!</div>`;
+                document.getElementById("resultMessage").innerHTML = 
+                  `<div class="alert alert-success">
+                    <i class="fas fa-check-circle me-2"></i>Cập nhật thành công!
+                  </div>`;
+                
+                // Cập nhật thông tin vào localStorage
+                localStorage.setItem("fullname", fullName);
+                localStorage.setItem("email", email);
+                
+                // Cập nhật hiển thị username
+                const displayElement = document.getElementById("username-display");
+                displayElement.innerHTML = 
+                  `<i class="fas fa-user me-1"></i>${fullName} <i class="fas fa-sign-out-alt ms-1"></i>`;
+                
+                // Làm mới trường mật khẩu
+                document.getElementById("password").value = "";
               } else {
-                document.getElementById(
-                  "resultMessage"
-                ).innerHTML = `<div class="alert alert-danger">Cập nhật thất bại: ${
-                  data.message || "Có lỗi xảy ra"
-                }</div>`;
+                document.getElementById("resultMessage").innerHTML = 
+                  `<div class="alert alert-danger">
+                    <i class="fas fa-times-circle me-2"></i>Cập nhật thất bại: ${
+                      data.message || "Có lỗi xảy ra"
+                    }
+                  </div>`;
               }
             })
             .catch((error) => {
               console.error("Lỗi khi cập nhật:", error);
-              document.getElementById(
-                "resultMessage"
-              ).innerHTML = `<div class="alert alert-danger">Lỗi kết nối máy chủ.</div>`;
+              document.getElementById("resultMessage").innerHTML = 
+                `<div class="alert alert-danger">
+                  <i class="fas fa-exclamation-triangle me-2"></i>Lỗi kết nối máy chủ.
+                </div>`;
             });
         });
     </script>

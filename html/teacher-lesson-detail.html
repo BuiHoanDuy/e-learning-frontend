@@ -5,84 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chi tiết bài giảng</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <style>
-      body {
-        background-color: #f8f9fa;
-      }
-      .card-lesson {
-        background: #fff;
-        border-radius: 16px;
-        padding: 30px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        margin-top: 40px;
-      }
-      iframe {
-        border-radius: 12px;
-      }
-      .edit-btn {
-        position: absolute;
-        top: 30px;
-        right: 30px;
-      }
-      .edit-btn button {
-        background-color: #0d6efd;
-        color: white;
-      }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/tea-lesson.css">
   </head>
   <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container">
-        <a class="navbar-brand" href="teacher-home.html">E-Learning</a>
+        <a class="navbar-brand" href="teacher-home.html">
+          <i class="fas fa-graduation-cap me-2"></i>E-Learning
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <i class="fas fa-bars"></i>
+        </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="home.html">Trang chủ</a></li>
-            <li class="nav-item"><a class="nav-link" href="login.html">Đăng xuất</a></li>
+            <li class="nav-item"><a class="nav-link" href="teacher-home.html"><i class="fas fa-home me-1"></i> Trang chủ</a></li>
+            <li class="nav-item"><a class="nav-link" href="login.html"><i class="fas fa-sign-out-alt me-1"></i> Đăng xuất</a></li>
           </ul>
         </div>
       </div>
     </nav>
 
-       <!-- Main layout with sidebar and content -->
-  <div class="container-fluid">
-    <div class="row">
-      <!-- Sidebar -->
-      <nav class="col-md-2 d-md-block bg-light sidebar min-vh-100">
-        <div class="position-sticky">
-          <h4 class="p-3">Khóa học của tôi</h4>
-          <ul class="nav flex-column" id="course-list">
-            <!-- Sidebar course list will be injected here -->
-          </ul>
-        </div>
-      </nav>
+    <!-- Main layout with sidebar and content -->
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+          <div class="position-sticky">
+            <h4><i class="fas fa-book-open"></i> Khóa học của tôi</h4>
+            <ul class="nav flex-column" id="course-list">
+              <!-- Sidebar course list will be injected here -->
+              <li class="nav-item">
+                <a class="nav-link" href="#"><span class="placeholder col-9"></span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"><span class="placeholder col-10"></span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"><span class="placeholder col-8"></span></a>
+              </li>
+            </ul>
+          </div>
+        </nav>
    
-    <!-- Main Content -->
-    <main class="col-md-10 ms-sm-auto px-4">
-        <div class="position-relative">
-          <div class="edit-btn d-none" id="edit-btn">
-            <button class="btn btn-sm" onclick="showEditModal()">✏ Chỉnh sửa</button>
-            <button class="btn btn-sm btn-danger ms-2" onclick="confirmDelete()">🗑 Xóa</button>
-          </div>
-
-          <div class="card-lesson">
-            <h2 id="lesson-title">Đang tải tiêu đề...</h2>
-            <p class="text-muted"><strong>Ngày tạo:</strong> <span id="created-at">--</span></p>
-
-            <div class="mt-4">
-              <h5 class="text-primary">📚 Nội dung bài giảng</h5>
-              <p id="lesson-content" class="fs-5">Đang tải nội dung...</p>
+        <!-- Main Content -->
+        <main class="col-md-9 col-lg-10 ms-sm-auto px-md-4">
+          <div class="position-relative">
+            <div class="edit-btn d-none" id="edit-btn">
+              <button class="btn btn-sm btn-edit me-2" onclick="showEditModal()">
+                <i class="fas fa-pencil-alt me-1"></i> Chỉnh sửa
+              </button>
+              <button class="btn btn-sm btn-delete" onclick="confirmDelete()">
+                <i class="fas fa-trash-alt me-1"></i> Xóa
+              </button>
             </div>
 
-            <div id="video-section" class="mt-4">
-              <h5 class="text-primary">🎬 Video bài giảng</h5>
-              <div id="video-container" class="ratio ratio-16x9"></div>
+            <div class="card-lesson">
+              <div class="lesson-header">
+                <h2 id="lesson-title" class="mb-3">Đang tải tiêu đề...</h2>
+                <span class="date-badge"><i class="far fa-calendar-alt me-1"></i> <span id="created-at">--</span></span>
+              </div>
+
+              <div class="mt-4">
+                <h5 class="section-title"><i class="fas fa-book"></i> Nội dung bài giảng</h5>
+                <div id="lesson-content" class="fs-5 content-area">Đang tải nội dung...</div>
+              </div>
+
+              <div id="video-section" class="mt-4">
+                <h5 class="section-title"><i class="fas fa-video"></i> Video bài giảng</h5>
+                <div id="video-container" class="ratio ratio-16x9"></div>
+              </div>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
-  </div>
 
     <!-- Edit Modal -->
     <div class="modal fade" id="editModal" tabindex="-1">
@@ -90,26 +89,27 @@
         <div class="modal-content">
           <form id="editForm">
             <div class="modal-header">
-              <h5 class="modal-title">Chỉnh sửa bài giảng</h5>
+              <h5 class="modal-title"><i class="fas fa-edit me-2"></i>Chỉnh sửa bài giảng</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
               <div class="mb-3">
-                <label class="form-label">Tiêu đề</label>
+                <label class="form-label fw-bold"><i class="fas fa-heading me-1"></i> Tiêu đề</label>
                 <input type="text" class="form-control" id="edit-title" required />
               </div>
               <div class="mb-3">
-                <label class="form-label">Nội dung</label>
-                <textarea class="form-control" rows="5" id="edit-content" required></textarea>
+                <label class="form-label fw-bold"><i class="fas fa-align-left me-1"></i> Nội dung</label>
+                <textarea class="form-control" rows="8" id="edit-content" required style="white-space: pre-wrap; font-family: 'Montserrat', sans-serif;"></textarea>
+                <small class="text-muted"><i class="fas fa-info-circle me-1"></i> Định dạng văn bản như xuống dòng, dấu cách sẽ được giữ nguyên.</small>
               </div>
               <div class="mb-3">
-                <label class="form-label">Video URL</label>
-                <input type="url" class="form-control" id="edit-video" />
+                <label class="form-label fw-bold"><i class="fas fa-link me-1"></i> Video URL</label>
+                <input type="url" class="form-control" id="edit-video" placeholder="https://www.youtube.com/watch?v=..." />
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-              <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+              <button type="button" class="btn btn-light" data-bs-dismiss="modal"><i class="fas fa-times me-1"></i> Hủy</button>
+              <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Lưu thay đổi</button>
             </div>
           </form>
         </div>
@@ -117,21 +117,21 @@
     </div>
 
     <!-- Footer -->
-    <footer class="text-light bg-primary py-4 mt-5">
+    <footer class="text-light py-4 mt-5">
       <div class="container text-center">
-        <p><a href="#" class="text-light">✉ Hỗ trợ kỹ thuật</a></p>
-        <p>Đăng nhập với tên: <a href="login.html" class="text-light" id="username-display">Đang tải...</a></p>
-        <p><a href="teacher-home.html" class="text-light">Trang chính</a></p>
+        <p><a href="#" class="text-light footer-link"><i class="fas fa-headset me-1"></i> Hỗ trợ kỹ thuật</a></p>
+        <p>Đăng nhập với tên: <a href="login.html" class="text-light footer-link" id="username-display"><span class="placeholder col-4"></span></a></p>
+        <p><a href="teacher-home.html" class="text-light footer-link"><i class="fas fa-home me-1"></i> Trang chính</a></p>
       </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
- // Load sidebar course list
- async function loadCourses() {
+      // Load sidebar course list
+      async function loadCourses() {
         const token = localStorage.getItem("token");
         const courseList = document.getElementById("course-list");
-
+        const courseId = localStorage.getItem("courseId");
         try {
           const response = await fetch("http://localhost:8080/elearning/courses", {
             headers: { Authorization: `Bearer ${token}` },
@@ -141,25 +141,25 @@
 
           if (data.code === 200 && Array.isArray(data.result)) {
             courseList.innerHTML = "";
-            data.result.forEach((course) => {
+            data.result.forEach((c) => {
               const li = document.createElement("li");
               li.className = "nav-item";
 
               const a = document.createElement("a");
-              a.className = "nav-link";
-              a.href = `teacher-course-detail.html?id=${course.id}`;
-              a.textContent = course.courseName;
+              a.className = c.id === courseId ? "nav-link active" : "nav-link";
+              a.href = `teacher-course-detail.html?id=${c.id}`;
+              a.textContent = c.courseName;
 
               li.appendChild(a);
               courseList.appendChild(li);
             });
           } else {
-            courseList.innerHTML = "<li class='nav-item text-danger p-2'>Không có khóa học nào.</li>";
+            courseList.innerHTML = "<li class='nav-item'><span class='nav-link text-danger'><i class='fas fa-exclamation-circle me-2'></i>Không có khóa học nào.</span></li>";
           }
         } catch (error) {
           console.error("Lỗi khi tải khóa học:", error);
           courseList.innerHTML =
-            "<li class='nav-item text-danger p-2'>Không thể tải danh sách khóa học.</li>";
+            "<li class='nav-item'><span class='nav-link text-danger'><i class='fas fa-exclamation-triangle me-2'></i>Không thể tải danh sách khóa học.</span></li>";
         }
       }
 
@@ -179,7 +179,8 @@
 
         const params = new URLSearchParams(window.location.search);
         currentLessonId = params.get("id");
-console.log(currentLessonId);
+        console.log(currentLessonId);
+        
         if (!currentLessonId) {
           alert("Không tìm thấy bài giảng!");
           return;
@@ -202,9 +203,9 @@ console.log(currentLessonId);
                 const videoId = lesson.videoUrl.split("v=")[1];
                 videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
               } else if (lesson.videoUrl) {
-                videoContainer.innerHTML = `<a href="${lesson.videoUrl}" target="_blank">Xem video tại đây</a>`;
+                videoContainer.innerHTML = `<a href="${lesson.videoUrl}" target="_blank" class="btn btn-outline-primary"><i class="fas fa-external-link-alt me-2"></i>Xem video tại đây</a>`;
               } else {
-                document.getElementById("video-section").innerHTML = '<p class="text-muted">Không có video.</p>';
+                document.getElementById("video-section").innerHTML = '<p class="text-muted"><i class="fas fa-info-circle me-2"></i>Không có video cho bài giảng này.</p>';
               }
             } else {
               alert("Không thể tải thông tin bài giảng.");
@@ -225,34 +226,35 @@ console.log(currentLessonId);
         const modal = new bootstrap.Modal(document.getElementById("editModal"));
         modal.show();
       }
+      
       function confirmDelete() {
-  if (!currentLessonId) return;
-  const confirmResult = confirm("Bạn có chắc chắn muốn xóa bài giảng này không?");
-  if (!confirmResult) return;
+        if (!currentLessonId) return;
+        const confirmResult = confirm("Bạn có chắc chắn muốn xóa bài giảng này không?");
+        if (!confirmResult) return;
 
-  const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
 
-  fetch(`http://localhost:8080/elearning/lessons/${currentLessonId}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then((res) => {
-      if (res.ok) {
-        alert("Đã xóa bài giảng thành công.");
-        window.location.href = "teacher-course-detail.html"; // chuyển về trang chủ hoặc danh sách bài giảng
-      } else {
-        return res.json().then((data) => {
-          throw new Error(data.message || "Xóa bài giảng thất bại.");
-        });
+        fetch(`http://localhost:8080/elearning/lessons/${currentLessonId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((res) => {
+            if (res.ok) {
+              alert("Đã xóa bài giảng thành công.");
+              window.location.href = "teacher-course-detail.html"; // chuyển về trang chủ hoặc danh sách bài giảng
+            } else {
+              return res.json().then((data) => {
+                throw new Error(data.message || "Xóa bài giảng thất bại.");
+              });
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            alert("Lỗi khi xóa bài giảng: " + err.message);
+          });
       }
-    })
-    .catch((err) => {
-      console.error(err);
-      alert("Lỗi khi xóa bài giảng: " + err.message);
-    });
-}
 
       document.getElementById("editForm").addEventListener("submit", function (e) {
         e.preventDefault();

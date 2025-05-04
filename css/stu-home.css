@@ -1,0 +1,196 @@
+.card {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.card-subtitle {
+  font-size: 0.95rem;
+  color: #6c757d;
+}
+
+.card-date {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  border-radius: 5px;
+  padding: 0.5rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  transform: translateY(-2px);
+}
+
+.btn-success {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+  border-radius: 5px;
+  padding: 0.5rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+  background-color: #3db4db;
+  border-color: #3db4db;
+  transform: translateY(-2px);
+}
+
+.btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.input-group {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#join-code-input {
+  border-radius: 8px 0 0 8px;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #ced4da;
+}
+
+
+.search-container {
+  background-color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+  color: var(--primary-color);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+h2:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50px;
+  height: 4px;
+  background-color: var(--accent-color);
+  border-radius: 2px;
+}
+
+.page-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.page-title i {
+  font-size: 1.75rem;
+  margin-right: 0.75rem;
+  color: var(--accent-color);
+}
+
+.course-count {
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  margin-left: 1rem;
+}
+
+.profile-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.profile-link i {
+  margin-right: 0.5rem;
+}
+
+.profile-link:hover {
+  color: var(--secondary-color);
+  transform: translateX(5px);
+}
+
+#search-result .card {
+  border-left: 4px solid var(--success-color);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  color: #dee2e6;
+  margin-bottom: 1rem;
+}
+
+/* Card Style */
+.course-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.course-card .card-img-top {
+  height: 140px;
+  background: linear-gradient(45deg, #4361ee26, #4cc9f026);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.course-card .course-icon {
+  font-size: 3rem;
+  color: var(--primary-color);
+}
+
+.course-card .teacher-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.teacher-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}

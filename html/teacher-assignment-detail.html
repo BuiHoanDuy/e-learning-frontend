@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quản lý bài tập - Giao diện Giáo viên</title>
-    <link rel="stylesheet" href="/css/teacher-assignment-detail.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -13,15 +12,22 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/css/teacher-assignment-detail.css">
   </head>
   <body>
     <!-- Header  -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container">
-        <a class="navbar-brand" href="teacher-home.html"
-          >E-Learning giáo viên</a
-        >
+        <a class="navbar-brand" href="teacher-home.html">
+          <i class="fas fa-graduation-cap me-2"></i>E-Learning giáo viên
+        </a>
         <button
           class="navbar-toggler"
           type="button"
@@ -33,10 +39,14 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="teacher-home.html">Trang chính</a>
+              <a class="nav-link" href="teacher-home.html">
+                <i class="fas fa-home me-1"></i> Trang chính
+              </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="login.html">Đăng xuất</a>
+              <a class="nav-link" href="login.html">
+                <i class="fas fa-sign-out-alt me-1"></i> Đăng xuất
+              </a>
             </li>
           </ul>
         </div>
@@ -48,9 +58,11 @@
         <!-- Sidebar -->
         <nav class="col-md-3 col-lg-2 bg-light sidebar">
           <div class="position-sticky">
-            <h4 class="p-3">Khóa học của tôi</h4>
+            <h4><i class="fas fa-book me-2"></i>Khóa học của tôi</h4>
             <ul class="nav flex-column" id="course-list">
-              <!-- Sidebar course list will be injected here -->
+              <li class="nav-item">
+                <a class="nav-link" href="#">Đang tải khóa học...</a>
+              </li>
             </ul>
           </div>
         </nav>
@@ -58,15 +70,86 @@
         <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 teacher-section">
           <div class="container container-main">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-3">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="teacher-home.html">Trang chủ</a>
+                </li>
+                <li class="breadcrumb-item">
+                  <a href="#" id="course-breadcrumb">Khóa học</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Chi tiết bài tập
+                </li>
+              </ol>
+            </nav>
+
             <div class="card">
               <div class="assignment-header">
                 <h1 id="assignment-title">Tên bài tập</h1>
-                <div>
+                <div class="d-flex">
+                  <div
+                    class="download-dropdown"
+                    style="
+                      position: relative;
+                      display: inline-block;
+                      margin-right: 8px;
+                    "
+                  >
+                    <div
+                      class="download-dropdown-content"
+                      style="
+                        display: none;
+                        position: absolute;
+                        background-color: #fff;
+                        min-width: 160px;
+                        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+                        z-index: 1;
+                        border-radius: 4px;
+                        overflow: hidden;
+                      "
+                    >
+                      <a
+                        href="#"
+                        style="
+                          padding: 12px 16px;
+                          text-decoration: none;
+                          display: block;
+                          color: var(--text-color);
+                        "
+                        id="export-excel"
+                        >Excel (.xlsx)</a
+                      >
+                      <a
+                        href="#"
+                        style="
+                          padding: 12px 16px;
+                          text-decoration: none;
+                          display: block;
+                          color: var(--text-color);
+                        "
+                        id="export-csv"
+                        >CSV (.csv)</a
+                      >
+                      <a
+                        href="#"
+                        style="
+                          padding: 12px 16px;
+                          text-decoration: none;
+                          display: block;
+                          color: var(--text-color);
+                        "
+                        id="export-pdf"
+                        >PDF (.pdf)</a
+                      >
+                    </div>
+                  </div>
                   <button
                     class="btn btn-outline"
                     onclick="openAssignmentModal()"
                   >
-                    <i class="fas fa-edit"></i> Chỉnh sửa
+                    <i class="fas fa-edit me-1"></i> Chỉnh sửa
                   </button>
                 </div>
               </div>
@@ -74,9 +157,7 @@
               <div class="assignment-details">
                 <div class="detail-card">
                   <div class="label">Mã bài tập</div>
-                  <div class="value" id="assignment-id">
-                    -
-                  </div>
+                  <div class="value" id="assignment-id">-</div>
                 </div>
                 <div class="detail-card">
                   <div class="label">Ngày đến hạn</div>
@@ -97,11 +178,14 @@
                 </div>
               </div>
 
-              <div class="card">
-                <div class="label">Mô tả bài tập</div>
+              <div
+                class="card"
+                style="background-color: #f8f9fa; padding: 1.25rem"
+              >
+                <div class="label mb-2">Mô tả bài tập</div>
                 <p
                   id="assignment-description"
-                  style="margin-top: 10px; line-height: 1.5"
+                  style="margin: 0; line-height: 1.6"
                 >
                   Phải trình bày bài làm theo template GV gửi kèm. SV phải tự
                   làm bài, không sao chép từ bạn bè hay Internet. Vi phạm sẽ bị
@@ -110,7 +194,7 @@
                 </p>
               </div>
 
-              <div class="tabs">
+              <div class="tabs mt-4">
                 <div class="tab active" onclick="switchTab('submitted')">
                   Đã nộp
                   <span class="badge badge-count" id="submitted-badge">2</span>
@@ -143,6 +227,7 @@
                     </tr>
                   </thead>
                   <tbody id="submitted-body">
+                    <!-- Data will be loaded here -->
                   </tbody>
                 </table>
               </div>
@@ -166,6 +251,7 @@
                     </tr>
                   </thead>
                   <tbody id="not-submitted-body">
+                    <!-- Data will be loaded here -->
                   </tbody>
                 </table>
               </div>
@@ -174,16 +260,28 @@
         </main>
       </div>
     </div>
-    <footer class="text-light bg-primary py-3 mt-4">
+
+    <footer class="text-light py-3 mt-4">
       <div class="container text-center">
-        <p><a href="#" class="text-light">✉ Liên hệ hỗ trợ</a></p>
+        <p>
+          <a href="#" class="text-light footer-link"
+            ><i class="fas fa-envelope me-1"></i> Liên hệ hỗ trợ</a
+          >
+        </p>
         <p>
           Đăng nhập với tên
-          <a href="login.html" class="text-light" id="username-display"
+          <a
+            href="login.html"
+            class="text-light footer-link"
+            id="username-display"
             >Đang tải...</a
           >
         </p>
-        <p><a href="teacher-home.html" class="text-light">Trang chính</a></p>
+        <p>
+          <a href="teacher-home.html" class="text-light footer-link"
+            ><i class="fas fa-home me-1"></i> Trang chính</a
+          >
+        </p>
       </div>
     </footer>
 
@@ -191,7 +289,7 @@
     <div class="modal" id="assignment-modal">
       <div class="modal-content">
         <div class="modal-header">
-          <h2>Chỉnh sửa bài tập</h2>
+          <h2><i class="fas fa-edit me-2"></i>Chỉnh sửa bài tập</h2>
           <button class="close-btn" onclick="closeAssignmentModal()">
             <i class="fas fa-times"></i>
           </button>
@@ -199,19 +297,25 @@
         <div class="modal-body">
           <div class="form-group">
             <label for="edit-title">Tiêu đề bài tập</label>
-            <input type="text" id="edit-title" value="AI 2 da fix" />
+            <input
+              type="text"
+              id="edit-title"
+              class="form-control"
+              value="AI 2 da fix"
+            />
           </div>
           <div class="form-group">
             <label for="edit-description">Mô tả bài tập</label>
-            <textarea id="edit-description">
+            <textarea id="edit-description" class="form-control">
 Phải trình bày bài làm theo template GV gửi kèm. SV phải tự làm bài, không sao chép từ bạn bè hay Internet. Vi phạm sẽ bị 0 điểm. Nếu gặp vấn đề khi nộp bài, hãy liên hệ GV qua email trước khi hết deadline.</textarea
             >
           </div>
-          <div class="form-group">
+          <div class="form-group mb-0">
             <label for="edit-due-date">Ngày đến hạn</label>
             <input
               type="datetime-local"
               id="edit-due-date"
+              class="form-control"
               value="2025-04-30T00:00"
             />
           </div>
@@ -221,7 +325,7 @@ Phải trình bày bài làm theo template GV gửi kèm. SV phải tự làm b�
             Hủy
           </button>
           <button class="btn btn-primary" onclick="saveAssignment()">
-            Lưu thay đổi
+            <i class="fas fa-save me-1"></i> Lưu thay đổi
           </button>
         </div>
       </div>
@@ -231,21 +335,27 @@ Phải trình bày bài làm theo template GV gửi kèm. SV phải tự làm b�
     <div class="modal" id="delete-modal">
       <div class="modal-content">
         <div class="modal-header">
-          <h2>Xác nhận xóa bài nộp</h2>
+          <h2>
+            <i class="fas fa-exclamation-triangle me-2 text-danger"></i>Xác nhận
+            xóa bài nộp
+          </h2>
           <button class="close-btn" onclick="closeDeleteModal()">
             <i class="fas fa-times"></i>
           </button>
         </div>
         <div class="modal-body">
           <p>Bạn có chắc chắn muốn xóa bài nộp của sinh viên này?</p>
-          <p>Hành động này không thể hoàn tác.</p>
+          <p class="text-danger">
+            <i class="fas fa-exclamation-circle me-1"></i> Hành động này không
+            thể hoàn tác.
+          </p>
         </div>
         <div class="modal-footer">
           <button class="btn btn-outline" onclick="closeDeleteModal()">
             Hủy
           </button>
           <button class="btn btn-danger" onclick="confirmDelete()">
-            Xóa bài nộp
+            <i class="fas fa-trash me-1"></i> Xóa bài nộp
           </button>
         </div>
       </div>
@@ -258,6 +368,7 @@ Phải trình bày bài làm theo template GV gửi kèm. SV phải tự làm b�
       let currentStudentId = localStorage.getItem("id");
       let token = localStorage.getItem("token"); // Giả định token đã lưu trong localStorage
       const baseUrl = "http://localhost:8080/elearning";
+      const courseId = localStorage.getItem("courseId");
 
       // Functions for tab switching
       function switchTab(tabName) {
@@ -280,24 +391,27 @@ Phải trình bày bài làm theo template GV gửi kèm. SV phải tự làm b�
       // Modal functions
       function openAssignmentModal() {
         fetch(`${baseUrl}/assignments/${assignmentId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.code === 200) {
-                    // Update UI
-                    document.getElementById('edit-title').value = data.result.title;
-                    document.getElementById('edit-description').textContent = data.result.description;
-                    document.getElementById('edit-due-date').textContent = formatDate(new Date(data.result.dueDate));
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.code === 200) {
+              // Update UI
+              document.getElementById("edit-title").value = data.result.title;
+              document.getElementById("edit-description").textContent =
+                data.result.description;
+              document.getElementById("edit-due-date").textContent = formatDate(
+                new Date(data.result.dueDate)
+              );
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
 
         document.getElementById("assignment-modal").style.display = "flex";
       }
@@ -331,65 +445,73 @@ Phải trình bày bài làm theo template GV gửi kèm. SV phải tự làm b�
           dueDate: dueDate,
         };
 
-            fetch(`${baseUrl}/assignments/${assignmentId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(payload)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.code === 200) {
-                    // Update UI
-                    document.getElementById('assignment-title').textContent = title;
-                    document.getElementById('assignment-description').textContent = description;
-                    document.getElementById('due-date').textContent = formatDate(new Date(dueDate));
-                    console.log(dueDate);
-                    // Hide loading and close modal
-                    modalBody.classList.remove('loading');
-                    closeAssignmentModal();
-                    
-                    // Show success message
-                    alert('Cập nhật bài tập thành công!');
-                } else {
-                    alert('Có lỗi xảy ra khi cập nhật bài tập!');
-                    modalBody.classList.remove('loading');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Có lỗi xảy ra khi cập nhật bài tập!');
-                modalBody.classList.remove('loading');
-            });
+        fetch(`${baseUrl}/assignments/${assignmentId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.code === 200) {
+              // Update UI
+              document.getElementById("assignment-title").textContent = title;
+              document.getElementById("assignment-description").textContent =
+                description;
+              document.getElementById("due-date").textContent = formatDate(
+                new Date(dueDate)
+              );
+              console.log(dueDate);
+              // Hide loading and close modal
+              modalBody.classList.remove("loading");
+              closeAssignmentModal();
+
+              // Show success message
+              alert("Cập nhật bài tập thành công!");
+            } else {
+              alert("Có lỗi xảy ra khi cập nhật bài tập!");
+              modalBody.classList.remove("loading");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Có lỗi xảy ra khi cập nhật bài tập!");
+            modalBody.classList.remove("loading");
+          });
       }
 
-      async function updateUI(){
+      async function updateUI() {
         //  Update UI
-          fetch(`${baseUrl}/assignments/${assignmentId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.code === 200) {
-                    // Update UI
-                    const assignmentResponse = data.result; 
-                    document.getElementById('assignment-id').textContent = assignmentResponse.id;
-                    document.getElementById('assignment-title').textContent = assignmentResponse.title;
-                    document.getElementById('assignment-description').textContent = assignmentResponse.description;
-                    document.getElementById('due-date').textContent = formatDateTime(new Date(assignmentResponse.dueDate));             
-                } else {
-                    console.log("Lỗi khi load dữ liệu bài tập");
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+        fetch(`${baseUrl}/assignments/${assignmentId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.code === 200) {
+              // Update UI
+              const assignmentResponse = data.result;
+              document.getElementById("assignment-id").textContent =
+                assignmentResponse.id;
+              document.getElementById("assignment-title").textContent =
+                assignmentResponse.title;
+              document.getElementById("assignment-description").textContent =
+                assignmentResponse.description;
+              document.getElementById("due-date").textContent = formatDateTime(
+                new Date(assignmentResponse.dueDate)
+              );
+            } else {
+              console.log("Lỗi khi load dữ liệu bài tập");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
       }
 
       // Delete submission
@@ -911,14 +1033,14 @@ Phải trình bày bài làm theo template GV gửi kèm. SV phải tự làm b�
 
           if (data.code === 200 && Array.isArray(data.result)) {
             courseList.innerHTML = "";
-            data.result.forEach((course) => {
+            data.result.forEach((c) => {
               const li = document.createElement("li");
               li.className = "nav-item";
 
               const a = document.createElement("a");
-              a.className = "nav-link";
-              a.href = `teacher-course-detail.html?id=${course.id}`;
-              a.textContent = course.courseName;
+              a.className = c.id === courseId ? "nav-link active" : "nav-link";
+              a.href = `teacher-course-detail.html?id=${c.id}`;
+              a.textContent = c.courseName;
 
               li.appendChild(a);
               courseList.appendChild(li);

@@ -1,67 +1,365 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Latest compiled and minified CSS -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Latest compiled JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <title>Register</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Đăng Ký - E-Learning Platform</title>
+    <style>
+        :root {
+            --primary-color: #5469d4;
+            --secondary-color: #1eb2a6;
+            --accent-color: #ff7f50;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --light-text: #777;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(84, 105, 212, 0.8), rgba(30, 178, 166, 0.8)), url('/api/placeholder/1200/600') center/cover;
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 30px;
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hero-title {
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+        
+        .hero-text {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        
+        .register-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            margin-top: -50px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .card-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 8px;
+        }
+        
+        .form-control {
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+            background-color: #f8f9fc;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(84, 105, 212, 0.25);
+        }
+        
+        .input-group-text {
+            background-color: #f8f9fc;
+            border-radius: 10px 0 0 10px;
+            border-right: none;
+        }
+        
+        .input-with-icon .form-control {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .input-with-icon i {
+            color: var(--light-text);
+        }
+        
+        .btn-register {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(84, 105, 212, 0.4);
+        }
+        
+        .login-link {
+            color: var(--primary-color);
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .login-link:hover {
+            color: var(--secondary-color);
+        }
+        
+        .role-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .role-option {
+            flex: 1;
+            text-align: center;
+            background-color: #f8f9fc;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .role-option.active {
+            border-color: var(--primary-color);
+            background-color: rgba(84, 105, 212, 0.1);
+        }
+        
+        .role-option i {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--light-text);
+        }
+        
+        .role-option.active i {
+            color: var(--primary-color);
+        }
+        
+        .role-option h5 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .required-mark {
+            color: var(--accent-color);
+            margin-left: 3px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            color: var(--light-text);
+            font-size: 14px;
+            margin-top: 40px;
+        }
+        
+        .alert-error {
+            background-color: #ffe8e8;
+            color: #d63031;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .register-card {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .register-card {
+                padding: 20px;
+                margin-top: -30px;
+            }
+            
+            .hero-section {
+                padding: 40px 0;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">E-Learning</a>
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap me-2"></i>E-Learning
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav"></div>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Khóa học</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Liên hệ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">Đăng nhập</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
     
-    <!-- Register Page -->
-    <div class="container mt-5">
+    <!-- Hero Section -->
+    <section class="hero-section text-center">
+        <div class="container">
+            <h1 class="hero-title">Tham Gia Cộng Đồng Học Tập</h1>
+            <p class="hero-text">Bắt đầu hành trình học tập của bạn ngay hôm nay với nền tảng học trực tuyến hàng đầu.</p>
+        </div>
+    </section>
+    
+    <!-- Register Form -->
+    <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h2 class="text-center">Register</h2>
-                <form id="registerForm">
-                    <div class="mb-3">
-                        <label class="form-label">Full Name</label> <span style="color: red;"> *</span>
-                        <input type="text" class="form-control" id="fullName" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Username</label> <span style="color: red;"> *</span>
-                        <input type="text" class="form-control" id="username" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Password</label> <span style="color: red;"> *</span>
-                        <input type="password" class="form-control" id="password" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Role</label> 
-                        <select class="form-control" id="role" required>
-                            <option value="student">Student</option>
-                            <option value="teacher">Teacher</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-success w-100">Register</button>
-                </form>
-                <p class="text-center mt-3">Already have an account? <a href="login.html">Login here</a></p>
-                <div id="error-message" class="text-danger text-center mt-3"></div>
+            <div class="col-md-8 col-lg-6">
+                <div class="register-card">
+                    <h2 class="card-title">Đăng Ký Tài Khoản</h2>
+                    
+                    <form id="registerForm">
+                        <div class="role-selector mb-4">
+                            <div class="role-option active" data-role="student" id="student-role">
+                                <i class="fas fa-user-graduate"></i>
+                                <h5>Học viên</h5>
+                            </div>
+                            <div class="role-option" data-role="teacher" id="teacher-role">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                <h5>Giảng viên</h5>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Họ và Tên<span class="required-mark">*</span></label>
+                            <div class="input-group input-with-icon">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <input type="text" class="form-control" id="fullName" placeholder="Nhập họ và tên" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Tên đăng nhập<span class="required-mark">*</span></label>
+                            <div class="input-group input-with-icon">
+                                <span class="input-group-text"><i class="fas fa-at"></i></span>
+                                <input type="text" class="form-control" id="username" placeholder="Nhập tên đăng nhập" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Mật khẩu<span class="required-mark">*</span></label>
+                            <div class="input-group input-with-icon">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">Email</label>
+                            <div class="input-group input-with-icon">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <input type="email" class="form-control" id="email" placeholder="Nhập địa chỉ email">
+                            </div>
+                        </div>
+                        
+                        <input type="hidden" id="role" value="student">
+                        
+                        <button type="submit" class="btn btn-register w-100">
+                            <i class="fas fa-user-plus me-2"></i>Tạo Tài Khoản
+                        </button>
+                        
+                        <div class="alert-error" id="error-message"></div>
+                    </form>
+                    
+                    <p class="text-center mt-4">
+                        Đã có tài khoản? <a href="login.html" class="login-link">Đăng nhập</a>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 E-Learning. Tất cả quyền được bảo lưu.</p>
+        </div>
+    </footer>
 
-    <!-- JavaScript logic -->
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Role selector functionality
+        document.querySelectorAll('.role-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove active class from all options
+                document.querySelectorAll('.role-option').forEach(el => {
+                    el.classList.remove('active');
+                });
+                
+                // Add active class to clicked option
+                this.classList.add('active');
+                
+                // Update hidden role input
+                document.getElementById('role').value = this.dataset.role;
+            });
+        });
+
+        // Form submission
         document.getElementById('registerForm').addEventListener('submit', async function (e) {
             e.preventDefault(); // Prevent form from submitting normally
 
@@ -71,7 +369,8 @@
             const email = document.getElementById('email').value;
             const role = document.getElementById('role').value;
             const errorMessage = document.getElementById('error-message');
-            errorMessage.textContent = ""; // Clear any previous error messages
+            
+            errorMessage.style.display = "none"; // Hide any previous error messages
 
             try {
                 // Make the POST request to register the user
@@ -85,18 +384,21 @@
 
                 const data = await response.json();
 
-                
                 if (data.code === 200 && data.result) {
-                    // Registration was successful, redirect to login page
-                    if(role === "Teacher") alert("Tài khoản đang chờ admin duyệt");
+                    // Registration was successful
+                    if(role === "teacher") {
+                        alert("Tài khoản đang chờ admin duyệt");
+                    }
                     window.location.href = "login.html";
                 } else {
                     // Show the error message if registration failed
-                    errorMessage.textContent = "Registration failed. Please try again.";
+                    errorMessage.textContent = "Đăng ký thất bại. Vui lòng thử lại.";
+                    errorMessage.style.display = "block";
                 }
             } catch (error) {
                 console.error('Error:', error);
-                errorMessage.textContent = "Cannot connect to the server.";
+                errorMessage.textContent = "Không thể kết nối đến máy chủ.";
+                errorMessage.style.display = "block";
             }
         });
     </script>

@@ -5,25 +5,251 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Latest compiled and minified CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <title>Document</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <title>E-Learning Platform</title>
+    
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hero-container {
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            padding: 3rem 2rem;
+            max-width: 900px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .hero-container::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            opacity: 0.2;
+            z-index: -1;
+        }
+        
+        .hero-container::after {
+            content: "";
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .site-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .site-title::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            border-radius: 5px;
+        }
+        
+        .lead {
+            color: #6c757d;
+            font-weight: 300;
+            margin-bottom: 2rem;
+        }
+        
+        .btn-custom-primary {
+            background: var(--primary-color);
+            border: none;
+            border-radius: 30px;
+            padding: 12px 30px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-custom-primary:hover {
+            background: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn-custom-success {
+            background: #10b981;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 30px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-custom-success:hover {
+            background: #059669;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            border-radius: 50%;
+            color: white;
+            margin-bottom: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 15px rgba(76, 201, 240, 0.2);
+        }
+        
+        .features-section {
+            margin-top: 4rem;
+        }
+        
+        .feature-title {
+            color: var(--dark-color);
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .feature-text {
+            color: #6c757d;
+            font-size: 0.95rem;
+        }
+        
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.5;
+        }
+        
+        @media (max-width: 767px) {
+            .hero-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            .features-section {
+                margin-top: 2.5rem;
+            }
+            
+            .feature-col {
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-        <!-- Hero Section -->
-        <div class="container text-center mt-5">
-            <h1>Welcome to E-Learning</h1>
-            <p class="lead">A modern platform for online learning and teaching.</p>
-            <div class="mt-4">
-                <a href="login.html" class="btn btn-primary btn-lg me-2">Login</a>
-                <a href="register.html" class="btn btn-success btn-lg">Register</a>
+    <div class="animated-bg"></div>
+    
+    <div class="container hero-container text-center">
+        <h1 class="site-title mb-4">Welcome to E-Learning</h1>
+        <p class="lead">A modern platform for online learning and teaching.</p>
+        
+        <div class="mt-4 mb-5">
+            <a href="login.html" class="btn btn-custom-primary btn-lg me-3">
+                <i class="fas fa-sign-in-alt me-2"></i>Login
+            </a>
+            <a href="register.html" class="btn btn-custom-success btn-lg">
+                <i class="fas fa-user-plus me-2"></i>Register
+            </a>
+        </div>
+        
+        <div class="row features-section">
+            <div class="col-md-4 feature-col">
+                <div class="feature-icon">
+                    <i class="fas fa-laptop"></i>
+                </div>
+                <h3 class="feature-title">Learn Anywhere</h3>
+                <p class="feature-text">Access our courses from any device, anytime, anywhere.</p>
+            </div>
+            
+            <div class="col-md-4 feature-col">
+                <div class="feature-icon">
+                    <i class="fas fa-certificate"></i>
+                </div>
+                <h3 class="feature-title">Get Certified</h3>
+                <p class="feature-text">Earn certificates to showcase your acquired skills.</p>
+            </div>
+            
+            <div class="col-md-4 feature-col">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="feature-title">Expert Instructors</h3>
+                <p class="feature-text">Learn from industry experts with practical experience.</p>
             </div>
         </div>
+    </div>
+    
+    <script>
+        // Create animated background
+        document.addEventListener('DOMContentLoaded', function() {
+            const bg = document.querySelector('.animated-bg');
+            
+            for (let i = 0; i < 20; i++) {
+                const circle = document.createElement('div');
+                const size = Math.random() * 100 + 50;
+                
+                circle.style.position = 'absolute';
+                circle.style.width = `${size}px`;
+                circle.style.height = `${size}px`;
+                circle.style.borderRadius = '50%';
+                circle.style.background = i % 2 === 0 ? 
+                    'rgba(67, 97, 238, 0.05)' : 'rgba(76, 201, 240, 0.05)';
+                circle.style.left = `${Math.random() * 100}%`;
+                circle.style.top = `${Math.random() * 100}%`;
+                circle.style.animation = `float ${Math.random() * 10 + 10}s infinite ease-in-out`;
+                
+                bg.appendChild(circle);
+            }
+        });
 
+    </script>
 </body>
-
 </html>
-
-
